@@ -2,6 +2,9 @@ import logging
 import os
 from urllib.parse import quote_plus as urlquote
 
+from apscheduler.executors.pool import ThreadPoolExecutor
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+
 
 class BaseConfig:
 
@@ -58,6 +61,19 @@ class BaseConfig:
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD') or 'XXXXX'  # 生成的授权码
     # 默认发件人的邮箱,这里填写和MAIL_USERNAME一致即可
     MAIL_DEFAULT_SENDER = ('pear admin', os.getenv('MAIL_USERNAME') or '123@qq.com')
+
+    # 設置 APSCHEDULER 參數
+    SCHEDULER_API_ENABLED = os.getenv('SCHEDULER_API_ENABLED') or False
+    SCHEDULER_JOBSTORES: dict = {
+        'default': SQLAlchemyJobStore(url=f'mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}')
+    }
+    SCHEDULER_EXECUTORS: dict = {
+        'default': ThreadPoolExecutor(20)
+    }
+    SCHEDULER_JOB_DEFAULTS: dict = {
+        'coalesce': False,
+        'max_instances': 3
+    }
 
 
 class TestingConfig(BaseConfig):
