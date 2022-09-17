@@ -105,9 +105,9 @@ def dis_enable():
     return fail_api(msg="数据错误")
 
 
-@admin_task.delete('/remove/<int:_id>')
+@admin_task.delete('/remove/<string:_id>/')
 def remove_job(_id):  # 移除
-    scheduler.remove_job(str(_id))
+    scheduler.remove_job(_id)
     return success_api(msg="删除成功")
 
     #     scheduler.add_job(func=task1, id='2', args=(1, 1), trigger='cron', day_of_week='0-6', hour=18, minute=24,
