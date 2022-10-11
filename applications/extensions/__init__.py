@@ -5,7 +5,7 @@ from .init_login import init_login_manager
 from .init_debug_tool import init_debug_tool
 from .init_template_directives import init_template_directives
 from .init_error_views import init_error_views
-from .init_mail import init_mail
+from .init_mail import init_mail, mail as flask_mail
 from .init_apscheduler import init_scheduler
 from .init_upload import init_upload
 from .init_dotenv import init_dotenv
