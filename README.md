@@ -96,7 +96,7 @@ Pear Admin Flask
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
 # 安 装
-pip install -r requirement\requirement-dev.txt
+pip install -r requirement\dev.txt
 
 # 配 置
 .env

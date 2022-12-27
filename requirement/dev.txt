@@ -1,0 +1,15 @@
+Flask
+Flask-APScheduler
+Flask-Migrate
+Flask-Login
+Flask_Reuploaded
+Flask-SQLAlchemy
+flask-marshmallow
+marshmallow-sqlalchemy
+PyMySQL
+psutil
+Flask-Mail
+sqlparse
+Pillow
+python-dotenv
+webargs

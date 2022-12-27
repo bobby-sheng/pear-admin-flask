@@ -4,7 +4,7 @@ from io import BytesIO
 from flask import session, make_response, current_app
 from flask_login import current_user
 
-from applications.common.utils.gen_captcha import gen_captcha
+from applications.common.utils.gen_captcha import vieCode
 from applications.schemas import PowerOutSchema
 
 
@@ -36,7 +36,7 @@ def make_menu_tree():
             if p.enable == 0:
                 continue
             # 一二级菜单
-            if int(p.type) in [0,1] and p not in powers:
+            if int(p.type) in [0, 1] and p not in powers:
                 powers.append(p)
 
     power_schema = PowerOutSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
@@ -61,7 +61,8 @@ def make_menu_tree():
 
 # 生成验证码
 def get_captcha():
-    code, image = gen_captcha()
+    image, code = vieCode().GetCodeImage()
+    code = ''.join(code).lower()
     out = BytesIO()
     session["code"] = code
     image.save(out, 'png')
