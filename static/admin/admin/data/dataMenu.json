@@ -163,7 +163,7 @@
 				"openType": "_iframe",
 				"href": "view/document/popup.html"
 			}]
-		},{
+		}, {
 			"id": 60331,
 			"title": "高级组件",
 			"icon": "layui-icon layui-icon-console",
@@ -175,7 +175,7 @@
 				"type": 1,
 				"openType": "_iframe",
 				"href": "view/document/tab.html"
-			},{
+			}, {
 				"id": 60132,
 				"title": "数据菜单",
 				"icon": "layui-icon layui-icon-face-cry",

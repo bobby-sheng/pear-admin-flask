@@ -44,7 +44,7 @@
 		"enable": "1",
 		"login": "1",
 		"roleIds": null
-	},{
+	}, {
 		"userId": "1",
 		"username": "admin",
 		"password": "$2a$10$1K7E1.IYCrsoZVCb6utOo.5jENtfOzhdKWhc49t2lk.UQd7Oam4FG",
@@ -86,7 +86,7 @@
 		"enable": "1",
 		"login": "1",
 		"roleIds": null
-	},{
+	}, {
 		"userId": "1",
 		"username": "admin",
 		"password": "$2a$10$1K7E1.IYCrsoZVCb6utOo.5jENtfOzhdKWhc49t2lk.UQd7Oam4FG",

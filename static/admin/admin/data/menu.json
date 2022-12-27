@@ -32,6 +32,13 @@
 			"type": 1,
 			"openType": "_iframe",
 			"href": "view/system/theme.html"
+		}, {
+			"id": 16,
+			"title": "酸爽翻倍",
+			"icon": "layui-icon layui-icon-console",
+			"type": 1,
+			"openType": "_iframe",
+			"href": "view/document/core.html"
 		}]
 	},
 	{
@@ -202,7 +209,7 @@
 					"icon": "layui-icon layui-icon-face-cry",
 					"type": 1,
 					"openType": "_iframe",
-					"href": "view/document/hash.html"
+					"href": "view/document/encrypt.html"
 				},
 				{
 					"id": 2042,
@@ -235,6 +242,27 @@
 					"type": 1,
 					"openType": "_iframe",
 					"href": "view/document/topBar.html"
+				},
+				{
+					"id": 2046,
+					"title": "水印组件",
+					"type": 1,
+					"openType": "_iframe",
+					"href": "view/document/watermark.html"
+				},
+				{
+					"id": 2047,
+					"title": "全屏组件",
+					"type": 1,
+					"openType": "_iframe",
+					"href": "view/document/fullscreen.html"
+				},
+				{
+					"id": 2048,
+					"title": "汽泡组件",
+					"type": 1,
+					"openType": "_iframe",
+					"href": "view/document/popover.html"
 				}
 			]
 		}]
