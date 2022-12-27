@@ -111,6 +111,28 @@ CREATE TABLE `admin_dict_type`  (
 INSERT INTO `admin_dict_type` VALUES (1, '用户性别', 'user_sex', '用户性别', 1, NULL, '2021-04-16 13:37:11');
 
 -- ----------------------------
+-- Table structure for admin_mail
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_mail`;
+CREATE TABLE `admin_mail`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '邮件编号',
+  `receiver` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '收件人邮箱',
+  `subject` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮件主题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '邮件正文',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '发送人id',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of admin_mail
+-- ----------------------------
+INSERT INTO `admin_mail` VALUES (1, '1242733702@qq.com', 'pear-admin-flask', 'pear-admin-flask', 1, '2022-10-11 13:41:21');
+INSERT INTO `admin_mail` VALUES (4, '1242733702@qq.com', '湖人总冠军', '湖人总冠军', 1, '2022-10-11 14:03:30');
+INSERT INTO `admin_mail` VALUES (5, '1242733702@qq.com', '这是flask测试邮箱', '正文', 1, '2022-10-11 14:10:30');
+
+
+-- ----------------------------
 -- Table structure for admin_photo
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_photo`;
@@ -186,6 +208,9 @@ INSERT INTO `admin_power` VALUES (53, '任务管理', '1', 'admin:task:main', '/
 INSERT INTO `admin_power` VALUES (54, '任务增加', '2', 'admin:task:add', '', '', '53', 'layui-icon ', 1, '2021-06-22 22:20:54', '2021-06-22 22:20:54', 1);
 INSERT INTO `admin_power` VALUES (55, '任务修改', '2', 'admin:task:edit', '', '', '53', 'layui-icon ', 2, '2021-06-22 22:21:34', '2021-06-22 22:21:34', 1);
 INSERT INTO `admin_power` VALUES (56, '任务删除', '2', 'admin:task:remove', '', '', '53', 'layui-icon ', 3, '2021-06-22 22:22:18', '2021-06-22 22:22:18', 1);
+INSERT INTO `admin_power` VALUES (57, '邮件管理', '1', 'admin:mail:main', '/admin/mail', '_iframe', '1', 'layui-icon layui-icon layui-icon-release', 7, '2022-10-11 11:21:05', '2022-10-11 11:21:22', 1);
+INSERT INTO `admin_power` VALUES (58, '邮件发送', '2', 'admin:mail:add', '', '', '57', 'layui-icon layui-icon-ok-circle', 1, '2022-10-11 11:22:26', '2022-10-11 11:22:26', 1);
+INSERT INTO `admin_power` VALUES (59, '邮件删除', '2', 'admin:mail:remove', '', '', '57', 'layui-icon layui-icon layui-icon-close', 2, '2022-10-11 11:23:06', '2022-10-11 11:23:18', 1);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -271,6 +296,9 @@ INSERT INTO `admin_role_power` VALUES (363, 53, 1);
 INSERT INTO `admin_role_power` VALUES (364, 54, 1);
 INSERT INTO `admin_role_power` VALUES (365, 55, 1);
 INSERT INTO `admin_role_power` VALUES (366, 56, 1);
+INSERT INTO `admin_role_power` VALUES (367, 57, 1);
+INSERT INTO `admin_role_power` VALUES (368, 58, 1);
+INSERT INTO `admin_role_power` VALUES (369, 59, 1);
 
 -- ----------------------------
 -- Table structure for admin_user
