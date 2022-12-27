@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from applications.common.curd import model_to_dicts, enable_status, disable_status, get_one_by_id
-from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import str_escape

@@ -8,7 +8,7 @@
     开 箱 即 用 的 Flask 快 速 开 发 平 台
   </h4> 
 
-  [预 览](http://flask.pearadmin.com)   |   [官 网](http://www.pearadmin.com/)   |   [社区](http://forum.pearadmin.com/)
+  [预 览](http://flask.pearadmin.com)   |   [官 网](http://www.pearadmin.com/)   |   [文档](docs/detail.md)
 
 
 <p align="center">
