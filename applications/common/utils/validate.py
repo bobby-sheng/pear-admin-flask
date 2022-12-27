@@ -1,13 +1,11 @@
 # xss过滤
-from flask import abort, make_response, jsonify
+from flask import abort, make_response, jsonify, escape
 
 
-def xss_escape(s: str):
-    if s is None:
+def str_escape(s):
+    if not s:
         return None
-    else:
-        return s.replace("&", "&amp;").replace(">", "&gt;").replace("<", "&lt;").replace("'", "&#39;").replace('"',
-                                                                                                               "&#34;")
+    return str(escape(s))
 
 
 def check_data(schema, data):

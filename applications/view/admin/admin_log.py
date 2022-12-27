@@ -13,6 +13,8 @@ admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 @admin_log.get('/')
 @authorize("admin:log:main")
 def index():
+    from markupsafe import escape
+    escape
     return render_template('admin/admin_log/main.html')
 
 

@@ -4,10 +4,9 @@ from sqlalchemy import desc
 
 from applications.common import curd
 from applications.common.curd import enable_status, disable_status
-from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, fail_api, success_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
+from applications.common.utils.validate import str_escape
 from applications.extensions import db
 from applications.models import Role, Dept
 from applications.models import User, AdminLog
@@ -27,17 +26,20 @@ def main():
 @authorize("admin:user:main", log=True)
 def data():
     # 获取请求参数
-    real_name = xss_escape(request.args.get('realName', type=str))
-    username = xss_escape(request.args.get('username', type=str))
+    real_name = str_escape(request.args.get('realName', type=str))
+
+    username = str_escape(request.args.get('username', type=str))
     dept_id = request.args.get('deptId', type=int)
-    # 查询参数构造
-    mf = ModelFilter()
+
+    filters = []
     if real_name:
-        mf.contains(field_name="realname", value=real_name)
+        filters.append(User.realname.contains(real_name))
     if username:
-        mf.contains(field_name="username", value=username)
+        filters.append(User.realname.contains(username))
     if dept_id:
-        mf.exact(field_name="dept_id", value=dept_id)
+        filters.append(User.realname == dept_id)
+
+    # print(*filters)
     data, count = db.session.query(
         User.id,
         User.username,
@@ -46,8 +48,8 @@ def data():
         User.create_at,
         User.update_at,
         Dept.dept_name
-    ).filter(mf.get_filter(model=User)).filter(User.dept_id==Dept.id).layui_paginate_db_json()
-    return table_api(data=data,count=count)
+    ).filter(*filters).filter(User.dept_id == Dept.id).layui_paginate_db_json()
+    return table_api(data=data, count=count)
 
 
 # 用户增加
@@ -63,9 +65,9 @@ def add():
 def save():
     req_json = request.json
     a = req_json.get("roleIds")
-    username = xss_escape(req_json.get('username'))
-    real_name = xss_escape(req_json.get('realName'))
-    password = xss_escape(req_json.get('password'))
+    username = str_escape(req_json.get('username'))
+    real_name = str_escape(req_json.get('realName'))
+    password = str_escape(req_json.get('password'))
     role_ids = a.split(',')
 
     if not username or not real_name or not password:
@@ -114,11 +116,11 @@ def edit(id):
 @authorize("admin:user:edit", log=True)
 def update():
     req_json = request.json
-    a = xss_escape(req_json.get("roleIds"))
-    id = xss_escape(req_json.get("userId"))
-    username = xss_escape(req_json.get('username'))
-    real_name = xss_escape(req_json.get('realName'))
-    dept_id = xss_escape(req_json.get('deptId'))
+    a = str_escape(req_json.get("roleIds"))
+    id = str_escape(req_json.get("userId"))
+    username = str_escape(req_json.get('username'))
+    real_name = str_escape(req_json.get('realName'))
+    dept_id = str_escape(req_json.get('deptId'))
     role_ids = a.split(',')
     User.query.filter_by(id=id).update({'username': username, 'realname': real_name, 'dept_id': dept_id})
     u = User.query.filter_by(id=id).first()

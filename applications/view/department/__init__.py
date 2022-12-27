@@ -4,7 +4,7 @@ from applications.common import curd
 from applications.common.utils import validate
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
+from applications.common.utils.validate import str_escape
 from applications.extensions import db
 from applications.models import Dept, User
 from applications.schemas import DeptOutSchema
@@ -58,13 +58,13 @@ def save():
     req_json = request.json
     dept = Dept(
         parent_id=req_json.get('parentId'),
-        dept_name=xss_escape(req_json.get('deptName')),
-        sort=xss_escape(req_json.get('sort')),
-        leader=xss_escape(req_json.get('leader')),
-        phone=xss_escape(req_json.get('phone')),
-        email=xss_escape(req_json.get('email')),
-        status=xss_escape(req_json.get('status')),
-        address=xss_escape(req_json.get('address'))
+        dept_name=str_escape(req_json.get('deptName')),
+        sort=str_escape(req_json.get('sort')),
+        leader=str_escape(req_json.get('leader')),
+        phone=str_escape(req_json.get('phone')),
+        email=str_escape(req_json.get('email')),
+        status=str_escape(req_json.get('status')),
+        address=str_escape(req_json.get('address'))
     )
     r = db.session.add(dept)
     db.session.commit()
@@ -115,13 +115,13 @@ def update():
     json = request.json
     id = json.get("deptId"),
     data = {
-        "dept_name": validate.xss_escape(json.get("deptName")),
-        "sort": validate.xss_escape(json.get("sort")),
-        "leader": validate.xss_escape(json.get("leader")),
-        "phone": validate.xss_escape(json.get("phone")),
-        "email": validate.xss_escape(json.get("email")),
-        "status": validate.xss_escape(json.get("status")),
-        "address": validate.xss_escape(json.get("address"))
+        "dept_name": validate.str_escape(json.get("deptName")),
+        "sort": validate.str_escape(json.get("sort")),
+        "leader": validate.str_escape(json.get("leader")),
+        "phone": validate.str_escape(json.get("phone")),
+        "email": validate.str_escape(json.get("email")),
+        "status": validate.str_escape(json.get("status")),
+        "address": validate.str_escape(json.get("address"))
     }
     d = Dept.query.filter_by(id=id).update(data)
     if not d:

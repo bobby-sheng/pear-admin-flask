@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, jsonify
 from applications.common import curd
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
+from applications.common.utils.validate import str_escape
 from applications.extensions import db
 from applications.models import Power
 from applications.schemas import PowerOutSchema2
@@ -52,14 +52,14 @@ def select_parent():
 @authorize("admin:power:add", log=True)
 def save():
     req = request.json
-    icon = xss_escape(req.get("icon"))
-    openType = xss_escape(req.get("openType"))
-    parentId = xss_escape(req.get("parentId"))
-    powerCode = xss_escape(req.get("powerCode"))
-    powerName = xss_escape(req.get("powerName"))
-    powerType = xss_escape(req.get("powerType"))
-    powerUrl = xss_escape(req.get("powerUrl"))
-    sort = xss_escape(req.get("sort"))
+    icon = str_escape(req.get("icon"))
+    openType = str_escape(req.get("openType"))
+    parentId = str_escape(req.get("parentId"))
+    powerCode = str_escape(req.get("powerCode"))
+    powerName = str_escape(req.get("powerName"))
+    powerType = str_escape(req.get("powerType"))
+    powerUrl = str_escape(req.get("powerUrl"))
+    sort = str_escape(req.get("sort"))
     power = Power(
         icon=icon,
         open_type=openType,
@@ -96,14 +96,14 @@ def update():
     req_json = request.json
     id = request.json.get("powerId")
     data = {
-        "icon": xss_escape(req_json.get("icon")),
-        "open_type": xss_escape(req_json.get("openType")),
-        "parent_id": xss_escape(req_json.get("parentId")),
-        "code": xss_escape(req_json.get("powerCode")),
-        "name": xss_escape(req_json.get("powerName")),
-        "type": xss_escape(req_json.get("powerType")),
-        "url": xss_escape(req_json.get("powerUrl")),
-        "sort": xss_escape(req_json.get("sort"))
+        "icon": str_escape(req_json.get("icon")),
+        "open_type": str_escape(req_json.get("openType")),
+        "parent_id": str_escape(req_json.get("parentId")),
+        "code": str_escape(req_json.get("powerCode")),
+        "name": str_escape(req_json.get("powerName")),
+        "type": str_escape(req_json.get("powerType")),
+        "url": str_escape(req_json.get("powerUrl")),
+        "sort": str_escape(req_json.get("sort"))
     }
     res = Power.query.filter_by(id=id).update(data)
     db.session.commit()

@@ -4,7 +4,7 @@ from applications.common import curd
 from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
+from applications.common.utils.validate import str_escape
 from applications.extensions import db
 from applications.models import DictType, DictData
 from applications.schemas import DictTypeOutSchema, DictDataOutSchema
@@ -23,7 +23,7 @@ def main():
 @authorize("admin:dict:main", log=True)
 def dict_type_data():
     # 获取请求参数
-    type_name = xss_escape(request.args.get('typeName', type=str))
+    type_name = str_escape(request.args.get('typeName', type=str))
     # 查询参数构造
     mf = ModelFilter()
     if type_name:
@@ -46,10 +46,10 @@ def dict_type_add():
 @authorize("admin:dict:add", log=True)
 def dict_type_save():
     req_json = request.json
-    description = xss_escape(req_json.get("description"))
-    enable = xss_escape(req_json.get("enable"))
-    type_code = xss_escape(req_json.get("typeCode"))
-    type_name = xss_escape(req_json.get("typeName"))
+    description = str_escape(req_json.get("description"))
+    enable = str_escape(req_json.get("enable"))
+    type_code = str_escape(req_json.get("typeCode"))
+    type_name = str_escape(req_json.get("typeName"))
     d = DictType(type_name=type_name, type_code=type_code, enable=enable, description=description)
     db.session.add(d)
     db.session.commit()
@@ -72,11 +72,11 @@ def dict_type_edit():
 @authorize("admin:dict:edit", log=True)
 def dict_type_update():
     req_json = request.json
-    id = xss_escape(req_json.get("id"))
-    description = xss_escape(req_json.get("description"))
-    enable = xss_escape(req_json.get("enable"))
-    type_code = xss_escape(req_json.get("typeCode"))
-    type_name = xss_escape(req_json.get("typeName"))
+    id = str_escape(req_json.get("id"))
+    description = str_escape(req_json.get("description"))
+    enable = str_escape(req_json.get("enable"))
+    type_code = str_escape(req_json.get("typeCode"))
+    type_name = str_escape(req_json.get("typeName"))
     DictType.query.filter_by(id=id).update({
         "description": description,
         "enable": enable,
@@ -126,7 +126,7 @@ def dict_type_delete(_id):
 @admin_dict.get('/dictData/data')
 @authorize("admin:dict:main", log=True)
 def dict_code_data():
-    type_code = xss_escape(request.args.get('typeCode', type=str))
+    type_code = str_escape(request.args.get('typeCode', type=str))
     dict_data = DictData.query.filter_by(type_code=type_code).layui_paginate()
     count = dict_data.total
     data = curd.model_to_dicts(schema=DictDataOutSchema, data=dict_data.items)
@@ -146,11 +146,11 @@ def dict_data_add():
 @authorize("admin:dict:add", log=True)
 def dict_data_save():
     req_json = request.json
-    data_label = xss_escape(req_json.get("dataLabel"))
-    data_value = xss_escape(req_json.get("dataValue"))
-    enable = xss_escape(req_json.get("enable"))
-    remark = xss_escape(req_json.get("remark"))
-    type_code = xss_escape(req_json.get("typeCode"))
+    data_label = str_escape(req_json.get("dataLabel"))
+    data_value = str_escape(req_json.get("dataValue"))
+    enable = str_escape(req_json.get("enable"))
+    remark = str_escape(req_json.get("remark"))
+    type_code = str_escape(req_json.get("typeCode"))
     d = DictData(data_label=data_label, data_value=data_value, enable=enable, remark=remark, type_code=type_code)
     db.session.add(d)
     db.session.commit()
@@ -175,11 +175,11 @@ def dict_data_update():
     req_json = request.json
     id = req_json.get("dataId")
     DictData.query.filter_by(id=id).update({
-        "data_label": xss_escape(req_json.get("dataLabel")),
-        "data_value": xss_escape(req_json.get("dataValue")),
-        "enable": xss_escape(req_json.get("enable")),
-        "remark": xss_escape(req_json.get("remark")),
-        "type_code": xss_escape(req_json.get("typeCode"))
+        "data_label": str_escape(req_json.get("dataLabel")),
+        "data_value": str_escape(req_json.get("dataValue")),
+        "enable": str_escape(req_json.get("enable")),
+        "remark": str_escape(req_json.get("remark")),
+        "type_code": str_escape(req_json.get("typeCode"))
     })
     db.session.commit()
     return success_api(msg="更新成功")

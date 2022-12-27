@@ -1,6 +1,6 @@
 from flask_login import current_user
 
-from applications.common.utils.validate import xss_escape
+from applications.common.utils.validate import str_escape
 from applications.extensions import db
 from applications.models import AdminLog
 
@@ -10,8 +10,8 @@ def login_log(request, uid, is_access):
         'method': request.method,
         'url': request.path,
         'ip': request.remote_addr,
-        'user_agent': xss_escape(request.headers.get('User-Agent')),
-        'desc': xss_escape(request.form.get('username')),
+        'user_agent': str_escape(request.headers.get('User-Agent')),
+        'desc': str_escape(request.form.get('username')),
         'uid': uid,
         'success': int(is_access)
 
@@ -36,8 +36,8 @@ def admin_log(request, is_access):
         'method': request.method,
         'url': request.path,
         'ip': request.remote_addr,
-        'user_agent': xss_escape(request.headers.get('User-Agent')),
-        'desc': xss_escape(str(dict(request.values))),
+        'user_agent': str_escape(request.headers.get('User-Agent')),
+        'desc': str_escape(str(dict(request.values))),
         'uid': current_user.id,
         'success': int(is_access)
 
