@@ -3,15 +3,14 @@ from flask_login import login_required, current_user
 from sqlalchemy import desc
 
 from applications.common import curd
-from applications.common.curd import model_to_dicts, enable_status, disable_status
+from applications.common.curd import enable_status, disable_status
 from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, fail_api, success_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
-from applications.models import Role
+from applications.models import Role, Dept
 from applications.models import User, AdminLog
-from applications.schemas import UserOutSchema
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 
@@ -39,12 +38,16 @@ def data():
         mf.contains(field_name="username", value=username)
     if dept_id:
         mf.exact(field_name="dept_id", value=dept_id)
-    # orm查询
-    # 使用分页获取data需要.items
-    user = User.query.filter(mf.get_filter(model=User)).layui_paginate()
-    count = user.total
-    # 返回api
-    return table_api(data=model_to_dicts(schema=UserOutSchema, data=user.items), count=count)
+    data, count = db.session.query(
+        User.id,
+        User.username,
+        User.realname,
+        User.enable,
+        User.create_at,
+        User.update_at,
+        Dept.dept_name
+    ).filter(mf.get_filter(model=User)).filter(User.dept_id==Dept.id).layui_paginate_db_json()
+    return table_api(data=data,count=count)
 
 
 # 用户增加
@@ -86,7 +89,7 @@ def save():
 def delete(id):
     user = User.query.filter_by(id=id).first()
     user.role = []
-    
+
     res = User.query.filter_by(id=id).delete()
     db.session.commit()
     if not res:
@@ -98,7 +101,7 @@ def delete(id):
 @admin_user.get('/edit/<int:id>')
 @authorize("admin:user:edit", log=True)
 def edit(id):
-    user = curd.get_one_by_id(User,id)
+    user = curd.get_one_by_id(User, id)
     roles = Role.query.all()
     checked_roles = []
     for r in user.role:
@@ -214,7 +217,7 @@ def enable():
 def dis_enable():
     _id = request.json.get('userId')
     if _id:
-        res = disable_status(model=User,id=_id)
+        res = disable_status(model=User, id=_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -229,7 +232,7 @@ def batch_remove():
     for id in ids:
         user = User.query.filter_by(id=id).first()
         user.role = []
-        
+
         res = User.query.filter_by(id=id).delete()
         db.session.commit()
     return success_api(msg="批量删除成功")
