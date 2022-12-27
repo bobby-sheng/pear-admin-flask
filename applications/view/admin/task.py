@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template
 from flask_apscheduler.utils import job_to_dict
-
+from datetime import datetime as dt
 from applications.common.tasks import tasks
 from applications.common.tasks.tasks import task_list
 from applications.common.utils.http import table_api, fail_api, success_api
@@ -56,12 +56,22 @@ def save():
             run_date=datetime,
             replace_existing=True)
     elif type == 'interval':
+        # load time
+        time = dt.strptime(time, "%H:%M:%S").time()
+        interval_seconds = 0
+        if time.hour != 0:
+            interval_seconds += time.hour * 60 * 60
+        if time.minute != 0:
+            interval_seconds += time.minute * 60
+        if time.second != 0:
+            interval_seconds += time.second
         scheduler.add_job(
             func=getattr(tasks, functions),
             id=_id,
             name=name,
             args=(1, 1),
             trigger=type,
+            seconds=interval_seconds,
             replace_existing=True)
     elif type == 'cron':
         scheduler.add_job(
@@ -71,7 +81,6 @@ def save():
             args=(1, 1),
             trigger=type,
             replace_existing=True)
-
     return success_api()
 
 
@@ -96,9 +105,9 @@ def dis_enable():
     return fail_api(msg="数据错误")
 
 
-@admin_task.delete('/remove/<int:_id>')
+@admin_task.delete('/remove/<string:_id>/')
 def remove_job(_id):  # 移除
-    scheduler.remove_job(str(_id))
+    scheduler.remove_job(_id)
     return success_api(msg="删除成功")
 
     #     scheduler.add_job(func=task1, id='2', args=(1, 1), trigger='cron', day_of_week='0-6', hour=18, minute=24,
