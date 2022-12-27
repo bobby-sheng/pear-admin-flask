@@ -13,14 +13,14 @@ admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
 # 用户管理
 @admin_role.get('/')
-@authorize("admin:role:main", log=True)
+@authorize("admin:role:main")
 def main():
     return render_template('admin/role/main.html')
 
 
 # 表格数据
 @admin_role.get('/data')
-@authorize("admin:role:main", log=True)
+@authorize("admin:role:main")
 def table():
     role_name = str_escape(request.args.get('roleName', type=str))
     role_code = str_escape(request.args.get('roleCode', type=str))

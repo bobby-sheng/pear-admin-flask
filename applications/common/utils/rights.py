@@ -9,6 +9,9 @@ def authorize(power: str, log: bool = False):
         @login_required
         @wraps(func)
         def wrapper(*args, **kwargs):
+            # 定义管理员的id为1
+            if 1 in session.get('role')[0]:
+                return func(*args, **kwargs)
             if not power in session.get('permissions'):
                 if log:
                     admin_log(request=request, is_access=False)

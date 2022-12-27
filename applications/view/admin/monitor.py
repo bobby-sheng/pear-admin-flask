@@ -12,7 +12,7 @@ admin_monitor_bp = Blueprint('adminMonitor', __name__, url_prefix='/admin/monito
 
 # 系统监控
 @admin_monitor_bp.get('/')
-@authorize("admin:monitor:main", log=True)
+@authorize("admin:monitor:main")
 def main():
     # 主机名称
     hostname = platform.node()

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, session
 from flask_login import login_required, current_user
 from sqlalchemy import desc
 
@@ -16,14 +16,14 @@ admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 
 # 用户管理
 @admin_user.get('/')
-@authorize("admin:user:main", log=True)
+@authorize("admin:user:main")
 def main():
     return render_template('admin/user/main.html')
 
 
 #   用户分页查询
 @admin_user.get('/data')
-@authorize("admin:user:main", log=True)
+@authorize("admin:user:main")
 def data():
     # 获取请求参数
     real_name = str_escape(request.args.get('realName', type=str))
@@ -238,3 +238,10 @@ def batch_remove():
         res = User.query.filter_by(id=id).delete()
         db.session.commit()
     return success_api(msg="批量删除成功")
+
+
+@admin_user.get("test")
+def test():
+    print(session)
+    print(session.get('role')[0])
+    return '6'

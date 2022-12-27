@@ -60,8 +60,23 @@ def login_post():
         login_user(user)
         # 记录登录日志
         login_log(request, uid=user.id, is_access=True)
-        # 存入权限
-        index_curd.add_auth_session()
+        # 授权路由存入session
+        role = current_user.role
+        user_power = []
+        for i in role:
+            if i.enable == 0:
+                continue
+            for p in i.power:
+                if p.enable == 0:
+                    continue
+                user_power.append(p.code)
+        session['permissions'] = user_power
+        # 角色存入session
+        roles = []
+        for role in current_user.role.all():
+            roles.append(role.id)
+        session['role'] = [roles]
+
         return success_api(msg="登录成功")
     login_log(request, uid=user.id, is_access=False)
     return fail_api(msg="用户名或密码错误")

@@ -12,14 +12,14 @@ admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
 
 #  图片管理
 @admin_file.get('/')
-@authorize("admin:file:main", log=True)
+@authorize("admin:file:main")
 def index():
     return render_template('admin/photo/photo.html')
 
 
 #  图片数据
 @admin_file.get('/table')
-@authorize("admin:file:main", log=True)
+@authorize("admin:file:main")
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)

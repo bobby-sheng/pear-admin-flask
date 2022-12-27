@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, request, current_app
 from flask_login import current_user
 from flask_mail import Message
-
 from applications.common.curd import model_to_dicts
 from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, fail_api, success_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
+from applications.common.utils.validate import str_escape
 from applications.extensions import db, flask_mail
 from applications.models import Mail
 from applications.schemas import MailOutSchema
@@ -16,19 +15,19 @@ admin_mail = Blueprint('adminMail', __name__, url_prefix='/admin/mail')
 
 # 用户管理
 @admin_mail.get('/')
-@authorize("admin:mail:main", log=True)
+@authorize("admin:mail:main")
 def main():
     return render_template('admin/mail/main.html')
 
 
 #   用户分页查询
 @admin_mail.get('/data')
-@authorize("admin:mail:main", log=True)
+@authorize("admin:mail:main")
 def data():
     # 获取请求参数
-    receiver = xss_escape(request.args.get("receiver"))
-    subject = xss_escape(request.args.get('subject'))
-    content = xss_escape(request.args.get('content'))
+    receiver = str_escape(request.args.get("receiver"))
+    subject = str_escape(request.args.get('subject'))
+    content = str_escape(request.args.get('content'))
     # 查询参数构造
     mf = ModelFilter()
     if receiver:
@@ -56,9 +55,9 @@ def add():
 @authorize("admin:mail:add", log=True)
 def save():
     req_json = request.json
-    receiver = xss_escape(req_json.get("receiver"))
-    subject = xss_escape(req_json.get('subject'))
-    content = xss_escape(req_json.get('content'))
+    receiver = str_escape(req_json.get("receiver"))
+    subject = str_escape(req_json.get('subject'))
+    content = str_escape(req_json.get('content'))
     user_id = current_user.id
 
     try:

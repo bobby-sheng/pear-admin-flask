@@ -12,13 +12,13 @@ admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
 
 
 @admin_power.get('/')
-@authorize("admin:power:main", log=True)
+@authorize("admin:power:main")
 def index():
     return render_template('admin/power/main.html')
 
 
 @admin_power.post('/data')
-@authorize("admin:power:main", log=True)
+@authorize("admin:power:main")
 def data():
     power = Power.query.all()
     res = {

@@ -14,13 +14,13 @@ admin_dict = Blueprint('adminDict', __name__, url_prefix='/admin/dict')
 
 # 数据字典
 @admin_dict.get('/')
-@authorize("admin:dict:main", log=True)
+@authorize("admin:dict:main")
 def main():
     return render_template('admin/dict/main.html')
 
 
 @admin_dict.get('/dictType/data')
-@authorize("admin:dict:main", log=True)
+@authorize("admin:dict:main")
 def dict_type_data():
     # 获取请求参数
     type_name = str_escape(request.args.get('typeName', type=str))

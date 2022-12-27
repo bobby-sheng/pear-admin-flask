@@ -8,19 +8,6 @@ from applications.common.utils.gen_captcha import vieCode
 from applications.schemas import PowerOutSchema
 
 
-# 授权路由存入session
-def add_auth_session():
-    role = current_user.role
-    user_power = []
-    for i in role:
-        if i.enable == 0:
-            continue
-        for p in i.power:
-            if p.enable == 0:
-                continue
-            user_power.append(p.code)
-    session['permissions'] = user_power
-
 
 # 生成菜单树
 def make_menu_tree():
