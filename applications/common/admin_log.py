@@ -32,12 +32,13 @@ def login_log(request, uid, is_access):
 
 
 def admin_log(request, is_access):
+    request_data = request.json if request.headers.get('Content-Type') == 'application/json' else request.values
     info = {
         'method': request.method,
         'url': request.path,
         'ip': request.remote_addr,
         'user_agent': str_escape(request.headers.get('User-Agent')),
-        'desc': str_escape(str(dict(request.values if request.method == 'GET' else request.json))),
+        'desc': str_escape(str(dict(request_data))),
         'uid': current_user.id,
         'success': int(is_access)
 
