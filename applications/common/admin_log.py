@@ -37,7 +37,7 @@ def admin_log(request, is_access):
         'url': request.path,
         'ip': request.remote_addr,
         'user_agent': str_escape(request.headers.get('User-Agent')),
-        'desc': str_escape(str(dict(request.values))),
+        'desc': str_escape(str(dict(request.values if request.method == 'GET' else request.json))),
         'uid': current_user.id,
         'success': int(is_access)
 
