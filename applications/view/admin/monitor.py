@@ -1,9 +1,10 @@
 import os
-import platform
 import re
-from datetime import datetime
+import sys
 import time
 import psutil
+import platform
+from datetime import datetime
 from flask import Blueprint, render_template, jsonify
 from applications.common.utils.rights import authorize
 
@@ -22,8 +23,8 @@ def main():
     python_version = platform.python_version()
     # 逻辑cpu数量
     cpu_count = psutil.cpu_count()
-    # cup使用率
-    cpus_percent = psutil.cpu_percent(interval=0.1)
+    # cpu使用率
+    cpus_percent = psutil.cpu_percent(interval=0.1, percpu=False)  # percpu 获取主使用率
     # 内存
     memory_information = psutil.virtual_memory()
     # 内存使用率
@@ -79,10 +80,19 @@ def main():
 @admin_monitor_bp.get('/polling')
 @authorize("admin:monitor:main")
 def ajax_polling():
-    # 获取cup使用率
-    cpus_percent = psutil.cpu_percent(interval=0.1)
+    # 获取cpu使用率
+    cpus_percent = psutil.cpu_percent(interval=0.1, percpu=False)  # percpu 获取主使用率
     # 获取内存使用率
     memory_information = psutil.virtual_memory()
     memory_usage = memory_information.percent
     time_now = time.strftime('%H:%M:%S ', time.localtime(time.time()))
     return jsonify(cups_percent=cpus_percent, memory_used=memory_usage, time_now=time_now)
+
+# 关闭程序
+@admin_monitor_bp.get('/kill')
+@authorize("admin:monitor:main")
+def kill():
+    for proc in psutil.process_iter():
+        if proc.pid == os.getpid():
+            proc.kill()
+    sys.exit(1)

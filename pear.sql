@@ -211,6 +211,10 @@ INSERT INTO `admin_power` VALUES (56, '任务删除', '2', 'admin:task:remove', 
 INSERT INTO `admin_power` VALUES (57, '邮件管理', '1', 'admin:mail:main', '/admin/mail', '_iframe', '1', 'layui-icon layui-icon layui-icon-release', 7, '2022-10-11 11:21:05', '2022-10-11 11:21:22', 1);
 INSERT INTO `admin_power` VALUES (58, '邮件发送', '2', 'admin:mail:add', '', '', '57', 'layui-icon layui-icon-ok-circle', 1, '2022-10-11 11:22:26', '2022-10-11 11:22:26', 1);
 INSERT INTO `admin_power` VALUES (59, '邮件删除', '2', 'admin:mail:remove', '', '', '57', 'layui-icon layui-icon layui-icon-close', 2, '2022-10-11 11:23:06', '2022-10-11 11:23:18', 1);
+INSERT INTO `admin_power` VALUES (60, '拓展插件', '0', '', '', '', '0', 'layui-icon layui-icon layui-icon-senior', 2, '2022-12-18 12:28:19', '2022-12-18 12:30:25', 1);
+INSERT INTO `admin_power` VALUES (61, '插件管理', '1', 'admin:plugin:main', '/plugin', '_iframe', '60', 'layui-icon layui-icon layui-icon layui-icon ', 1, '2022-12-18 12:30:13', '2022-12-18 13:57:20', 1);
+INSERT INTO `admin_power` VALUES	(62, '启禁插件', '2', 'admin:plugin:enable', '', '', '61', 'layui-icon ', 1, '2022-12-18 13:25:37', '2022-12-18 13:25:37', 1);
+INSERT INTO `admin_power` VALUES	(63, '删除插件', '2', 'admin:plugin:remove', '', '', '61', 'layui-icon layui-icon ', 2, '2022-12-18 13:26:30', '2022-12-18 13:27:17', 1);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -299,6 +303,10 @@ INSERT INTO `admin_role_power` VALUES (366, 56, 1);
 INSERT INTO `admin_role_power` VALUES (367, 57, 1);
 INSERT INTO `admin_role_power` VALUES (368, 58, 1);
 INSERT INTO `admin_role_power` VALUES (369, 59, 1);
+INSERT INTO `admin_role_power` VALUES (370, 60, 1);
+INSERT INTO `admin_role_power` VALUES (371, 61, 1);
+INSERT INTO `admin_role_power` VALUES (372, 62, 1);
+INSERT INTO `admin_role_power` VALUES (373, 63, 1);
 
 -- ----------------------------
 -- Table structure for admin_user
