@@ -5,6 +5,18 @@ from urllib.parse import quote_plus as urlquote
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
+# 强制读入 flaskenv 中的环境变量
+with open(".flaskenv", "r", encoding='utf-8') as f:
+    for line in f.read().split("\n"):
+        pos = line.find("#")
+        if pos != -1:
+            line = line[:pos]
+        line = line.strip()
+        if line == "":
+            continue
+        _ = line.split("=")
+        key, value = _[0], '='.join(_[1:])
+        os.environ[key.strip()] = value.strip()
 
 class BaseConfig:
 
@@ -74,6 +86,9 @@ class BaseConfig:
         'coalesce': False,
         'max_instances': 3
     }
+    
+    # 插件配置
+    PLUGIN_ENABLE_FOLDERS = os.getenv('PLUGIN_ENABLE_FOLDERS')
     
      # 配置多个数据库连接的连接串写法示例
     # HOSTNAME: 指数据库的IP地址、USERNAME：指数据库登录的用户名、PASSWORD：指数据库登录密码、PORT：指数据库开放的端口、DATABASE：指需要连接的数据库名称
