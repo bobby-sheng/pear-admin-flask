@@ -71,10 +71,6 @@ def data():
                         "plugin_name": info["plugin_name"],
                         "plugin_version": info["plugin_version"],
                         "plugin_description": info["plugin_description"],
-                        "developer_name": info["developer_name"],
-                        "developer_website": info["developer_website"],
-                        "developer_email": info["developer_email"],
-                        "developer_phone": info["developer_phone"],
                         "plugin_folder_name": filename,
                         "enable": "1" if filename in PLUGIN_ENABLE_FOLDERS else "0"
                     }
