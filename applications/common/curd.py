@@ -44,6 +44,8 @@ def auto_model_jsonify(data, model: db.Model):
 
 def model_to_dicts(schema: ma.Schema, data):
     """
+    将模型查询的数据对象转化为字典
+    
     :param schema: schema类
     :param model: sqlalchemy查询结果
     :return: 返回单个查询结果
