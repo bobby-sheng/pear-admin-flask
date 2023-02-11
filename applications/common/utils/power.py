@@ -60,7 +60,7 @@ def add(parentId, powerName, powerType, icon, sort: int, enable: bool, powerCode
 
     参考代码::
 
-        dev.power.add("0", "测试", "1", "layui-icon-time", 0, True, "testfor", "https://baidu.com", "_iframe")
+        power.add("0", "测试", "1", "layui-icon-time", 0, True, "testfor", "https://baidu.com", "_iframe")
 
     :param parentId: 父ID，0为顶级菜单ID
     :param powerName: 菜单名称
