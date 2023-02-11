@@ -3,10 +3,10 @@
 
 调用示例::
 
-    from applications import dev
-    dev.user.login_required # 用户是否登录
-    dev.user.current_user  # 当前登录用户
-    dev.user.authorize("XXX", log=True)  # 用户是否有此权限
+    from applications.common.utils import *
+    user.login_required # 用户是否登录
+    user.current_user  # 当前登录用户
+    user.authorize("XXX", log=True)  # 用户是否有此权限
 
 """
 
@@ -31,7 +31,7 @@ def filter_by(**kwargs):
 
     参考调用如下::
 
-        userinfo = dev.user.filter_by(username='zsq').first()  # 查询符合要求的第一个用户
+        userinfo = user.filter_by(username='admin').first()  # 查询符合要求的第一个用户
         print(userinfo.realname)  # 获取用户真实名字
 
 
@@ -44,7 +44,7 @@ def filter_by(**kwargs):
 def update(user_filter, data):
     """
     更新用户数据，修改将直接保存到数据库中。
-    注意：更新用户角色(role)请使用 dev.user.update_role() 函数。
+    注意：更新用户角色(role)请使用 user.update_role() 函数。
 
     可更新的字段如下::
 
@@ -54,12 +54,12 @@ def update(user_filter, data):
 
     参考调用如下::
 
-        user_filter = dev.user.filter_by(id=0)  # 获取指定用户ID的用户，注意不要使用会引起歧义的查询条件，否则会匹配到多个用户。
-        dev.user.update(user_filter, {username: 'zsq1314'})  # 更新其用户名
+        user_filter = user.filter_by(id=0)  # 获取指定用户ID的用户，注意不要使用会引起歧义的查询条件，否则会匹配到多个用户。
+        user.update(user_filter, {username: 'admin'})  # 更新其用户名
 
 
 
-    :param user_filter: dev.user.filter_by() 的结果。
+    :param user_filter: user.filter_by() 的结果。
     :param data: 要更新的数据，必须是字典。
     :return: None
     """
@@ -73,14 +73,14 @@ def update_role(user_filter, roleIds):
 
     参考调用如下::
 
-        user_filter = dev.user.filter_by(username='zsq')  # 获取符合要求的第一个用户
+        user_filter = user.filter_by(username='test')  # 获取符合要求的第一个用户
         roleIds = []
-        roleIds.append(dev.role.filter_by(code='admin').first().id)  # 管理员角色ID
-        roleIds.append(dev.role.filter_by(code='common').first().id)  # 普通用户角色ID
-        dev.user.update_role(user_filter, roleIds)
+        roleIds.append(role.filter_by(code='admin').first().id)  # 管理员角色ID
+        roleIds.append(role.filter_by(code='common').first().id)  # 普通用户角色ID
+        user.update_role(user_filter, roleIds)
 
 
-    :param user_filter: dev.user.filter_by() 的结果。
+    :param user_filter: user.filter_by() 的结果。
     :param roleIds: 要更新的角色ID，作为列表传入。
     :return: None
     """
@@ -92,7 +92,7 @@ def get_role(user_filter):
     """
     获取用户的所有角色ID，将会返回一个整数列表。
 
-    :param user_filter: dev.user.filter_by() 的结果。
+    :param user_filter: user.filter_by() 的结果。
     :return: 列表 (roleIds)
     """
     checked_roles = []
@@ -107,10 +107,10 @@ def set_password(user_filter, password):
 
     参考调用如下::
 
-        user_filter = dev.user.filter_by(username='zsq')  # 获取符合要求的用户
-        dev.user.set_password(user_filter, 'zsq1314')  # 设置密码
+        user_filter = user.filter_by(username='admin')  # 获取符合要求的用户
+        user.set_password(user_filter, 'admin')  # 设置密码
 
-    :param user_filter: dev.user.filter_by() 的结果。
+    :param user_filter: user.filter_by() 的结果。
     :param password: 新密码。
     :return: None
     """
@@ -147,7 +147,7 @@ def delete(user_filter):
     """
     删除一个用户。此函数立刻写入数据库。
 
-    :param user_filter: dev.user.filter_by() 的结果。
+    :param user_filter: user.filter_by() 的结果。
     :return: 是否成功
     """
     user = user_filter.first()

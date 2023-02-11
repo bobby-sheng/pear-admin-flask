@@ -29,4 +29,4 @@ MAIL_USERNAME = '123@qq.com'
 MAIL_PASSWORD = 'XXXXX' # 生成的授权码
 
 # 插件配置
-PLUGIN_ENABLE_FOLDERS = ["helloworld"]
+PLUGIN_ENABLE_FOLDERS = ["aozhong666"]

@@ -14,7 +14,6 @@ def event_enable():
     """当此插件被启用时会调用此处"""
     print(f"启用插件，dir_path: {dir_path} ; folder_name: {folder_name}")
 
-
 def event_disable():
     """当此插件被禁用时会调用此处"""
     print(f"禁用插件，dir_path: {dir_path} ; folder_name: {folder_name}")

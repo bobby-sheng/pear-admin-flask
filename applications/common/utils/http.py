@@ -2,7 +2,7 @@ from flask import jsonify
 
 
 def success_api(msg: str = "成功"):
-    """ 成功响应 默认值”成功“ """
+    """ 成功响应 默认值“成功” """
     return jsonify(success=True, msg=msg)
 
 
