@@ -7,6 +7,7 @@ from flask_mail import Message
 from applications.common.curd import model_to_dicts
 from applications.common.helper import ModelFilter
 from applications.extensions import db, flask_mail
+from applications.extensions.init_mail import mail
 from applications.models import Mail
 from applications.schemas import MailOutSchema
 
@@ -49,7 +50,7 @@ def add(receiver, subject, content, user_id):
     """
     发送一封邮件，若发送成功立刻提交数据库。
 
-    :param receiver: 接收者 多个用英文逗号隔开
+    :param receiver: 接收者 多个用英文分号隔开
     :param subject: 邮件主题
     :param content: 邮件 html
     :param user_id: 发送用户ID（谁发送的？） 可以用 from flask_login import current_user ; current_user.id 来表示当前登录用户
@@ -81,3 +82,15 @@ def delete(id):
         return False
     db.session.commit()
     return True
+
+def send_mail(subject, recipients, content):
+    """原发送邮件函数，不会记录邮件发送记录
+
+    失败报错，请注意使用 try 拦截。
+
+    :param subject: 主题
+    :param recipients: 接收者 多个用英文分号隔开
+    :param content: 邮件 html
+    """
+    message = Message(subject=subject, recipients=recipients, html=content)
+    mail.send(message)
