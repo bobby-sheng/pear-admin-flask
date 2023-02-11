@@ -5,6 +5,13 @@ from applications.common.admin_log import admin_log
 
 
 def authorize(power: str, log: bool = False):
+    """用户权限判断，用于判断目前会话用户是否拥有访问权限
+
+    :param power: 权限标识
+    :type power: str
+    :param log: 是否记录日志, defaults to False
+    :type log: bool, optional
+    """
     def decorator(func):
         @login_required
         @wraps(func)

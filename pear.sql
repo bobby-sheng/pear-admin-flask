@@ -370,14 +370,3 @@ CREATE TABLE `alembic_version`  (
 INSERT INTO `alembic_version` VALUES ('7634e028e338');
 
 SET FOREIGN_KEY_CHECKS = 1;
-
--- ----------------------------
--- Table structure for plugin_setting
--- ----------------------------
-DROP TABLE IF EXISTS `plugin_setting`;
-CREATE TABLE `plugin_setting`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
-  `key` mediumtext COLLATE utf8_unicode_ci COMMENT '键',
-  `value` mediumtext COLLATE utf8_unicode_ci COMMENT '值',
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
