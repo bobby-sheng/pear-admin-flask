@@ -20,11 +20,11 @@ def filter_by(**kwargs):
 
     参考调用如下::
 
-        roleinfo = dev.role.filter_by(code='admin').first()  # 第一个符合要求的角色信息
+        roleinfo = role.filter_by(code='admin').first()  # 第一个符合要求的角色信息
         print(role.id, role.name)  # 输出角色名称与角色标识
 
         # 找出所有角色id
-        for role in dev.role.filter_by().all():
+        for role in role.filter_by().all():
             print(role.id, role.name)
 
     :param kwargs: 查询参数
@@ -78,7 +78,7 @@ def get_power(role_filter, detail=False, p=0):
         }
 
 
-    :param role_filter: dev.role.filter_by() 返回结果。
+    :param role_filter: role.filter_by() 返回结果。
     :param detail: 返回详细数据
     :param p: 如果有多个结果被找到，p可以确定使用第几个结果。内部使用 role_filter.all()[p]
     :return: 用户拥有的权限列表。
@@ -105,7 +105,7 @@ def set_power(role_filter, powerIds, p=0):
     """
     保存角色权限。此函数会直接写入数据库。
 
-    :param role_filter: dev.role.filter_by() 返回结果。
+    :param role_filter: role.filter_by() 返回结果。
     :param powerIds: 必须是一个包含权限ID的列表。如 [1, 2, 3]
     :param p: 如果有多个结果被找到，p可以确定使用第几个结果。内部使用 role_filter.all()[p]
     :return: None
@@ -128,10 +128,10 @@ def update(role_filter, data):
 
     参考调用如下::
 
-        role_filter = dev.role.filter_by(id=0)  # 获取指定角色ID的角色，注意不要使用会引起歧义的查询条件，否则会匹配到多个角色。
-        dev.role.update(role_filter, {enable: 0})  # 禁用
+        role_filter = role.filter_by(id=0)  # 获取指定角色ID的角色，注意不要使用会引起歧义的查询条件，否则会匹配到多个角色。
+        role.update(role_filter, {enable: 0})  # 禁用
 
-    :param role_filter: dev.role.filter_by() 返回结果。
+    :param role_filter: role.filter_by() 返回结果。
     :param data: 要更新的数据，必须是字典。
     :return: None
     """
@@ -143,7 +143,7 @@ def delete(role_filter):
     """
     删除角色。此功能将直接写入数据库。
 
-    :param role_filter: dev.role.filter_by() 返回结果。
+    :param role_filter: role.filter_by() 返回结果。
     :return: 是否成功。
     """
     role = role_filter.first()
