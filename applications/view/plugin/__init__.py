@@ -16,7 +16,6 @@ PLUGIN_ENABLE_FOLDERS = []
 
 def register_plugin_views(app: Flask):
     global PLUGIN_ENABLE_FOLDERS
-    applications.common.utils.app = app  # 对app重新赋值 便于插件简单调用
     app.register_blueprint(plugin_bp)
     # 载入插件过程
     # plugin_folder 配置的是插件的文件夹名
