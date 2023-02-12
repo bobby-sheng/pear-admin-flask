@@ -8,7 +8,6 @@ import json
 import traceback
 import importlib
 
-import applications.common.utils
 from applications.common.utils.rights import authorize
 
 plugin_bp = Blueprint('plugin', __name__, url_prefix='/plugin')
