@@ -4,7 +4,7 @@
 import os
 import logging
 from flask import Flask, request
-from applications.dev import console
+from . import console
 
 # 获取插件所在的目录（结尾没有分割符号）
 dir_path = os.path.dirname(__file__).replace("\\", "/")

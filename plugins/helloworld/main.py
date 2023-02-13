@@ -1,5 +1,3 @@
-from applications.dev import *
-
 from flask import render_template, Blueprint
 
 # 创建蓝图

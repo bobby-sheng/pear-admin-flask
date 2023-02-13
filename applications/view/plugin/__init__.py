@@ -8,7 +8,6 @@ import json
 import traceback
 import importlib
 
-import applications.dev
 from applications.common.utils.rights import authorize
 
 plugin_bp = Blueprint('plugin', __name__, url_prefix='/plugin')
@@ -16,7 +15,6 @@ PLUGIN_ENABLE_FOLDERS = []
 
 def register_plugin_views(app: Flask):
     global PLUGIN_ENABLE_FOLDERS
-    applications.dev.app = app  # 对app重新赋值 便于插件简单调用
     app.register_blueprint(plugin_bp)
     # 载入插件过程
     # plugin_folder 配置的是插件的文件夹名
@@ -71,10 +69,6 @@ def data():
                         "plugin_name": info["plugin_name"],
                         "plugin_version": info["plugin_version"],
                         "plugin_description": info["plugin_description"],
-                        "developer_name": info["developer_name"],
-                        "developer_website": info["developer_website"],
-                        "developer_email": info["developer_email"],
-                        "developer_phone": info["developer_phone"],
                         "plugin_folder_name": filename,
                         "enable": "1" if filename in PLUGIN_ENABLE_FOLDERS else "0"
                     }
