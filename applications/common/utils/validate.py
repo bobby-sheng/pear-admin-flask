@@ -2,7 +2,7 @@
 from flask import abort, make_response, jsonify, escape
 
 
-def str_escape(s: str) -> str:
+def str_escape(s):
     if not s:
         return None
     return str(escape(s))
