@@ -40,19 +40,26 @@ def data():
         filters.append(User.realname == dept_id)
 
     # print(*filters)
-    data, count = db.session.query(
-        User.id,
-        User.username,
-        User.realname,
-        User.enable,
-        User.create_at,
-        User.update_at,
-        Dept.dept_name
-    ).filter(*filters).filter(User.dept_id == Dept.id).layui_paginate_db_json()
-    return table_api(data=data, count=count)
+    query = db.session.query(
+        User,
+        Dept
+    ).filter(*filters).filter(User.dept_id == Dept.id).layui_paginate()
+
+    return table_api(
+        data=[{
+            'id': user.id,
+            'username': user.username,
+            'realname': user.realname,
+            'enable': user.enable,
+            'create_at': user.create_at,
+            'update_at': user.update_at,
+            'dept_name': dept.dept_name
+        } for user, dept in query],
+        count=query.total)
+
+    # 用户增加
 
 
-# 用户增加
 @admin_user.get('/add')
 @authorize("admin:user:add", log=True)
 def add():

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
+
 from applications.common.curd import model_to_dicts, enable_status, disable_status, get_one_by_id
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
@@ -7,7 +8,6 @@ from applications.common.utils.validate import str_escape
 from applications.extensions import db
 from applications.models import Role, Power, User
 from applications.schemas import RoleOutSchema, PowerOutSchema2
-
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
 
@@ -183,7 +183,6 @@ def remove(id):
 # 批量删除
 @admin_role.delete('/batchRemove')
 @authorize("admin:role:remove", log=True)
-@login_required
 def batch_remove():
     ids = request.form.getlist('ids[]')
     for id in ids:
