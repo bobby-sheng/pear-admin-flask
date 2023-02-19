@@ -43,7 +43,7 @@ def data():
     query = db.session.query(
         User,
         Dept
-    ).filter(*filters).filter(User.dept_id == Dept.id).layui_paginate()
+    ).filter(*filters).outerjoin(Dept, User.dept_id == Dept.id).layui_paginate()
 
     return table_api(
         data=[{
@@ -53,7 +53,7 @@ def data():
             'enable': user.enable,
             'create_at': user.create_at,
             'update_at': user.update_at,
-            'dept_name': dept.dept_name
+            'dept_name': dept.dept_name if dept else None
         } for user, dept in query],
         count=query.total)
 
