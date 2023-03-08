@@ -12,4 +12,4 @@ Flask-Mail
 sqlparse
 Pillow
 python-dotenv
-webargs
+validators
