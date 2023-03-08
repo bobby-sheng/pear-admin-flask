@@ -54,7 +54,7 @@ def data():
             'create_at': user.create_at,
             'update_at': user.update_at,
             'dept_name': dept.dept_name if dept else None
-        } for user, dept in query],
+        } for user, dept in query.items],
         count=query.total)
 
     # 用户增加
