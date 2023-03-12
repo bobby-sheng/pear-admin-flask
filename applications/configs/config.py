@@ -42,6 +42,7 @@ class BaseConfig:
 
     UPLOADED_PHOTOS_DEST = 'static/upload'
     UPLOADED_FILES_ALLOW = ['gif', 'jpg']
+    UPLOADS_AUTOSERVE = True
 
     # JSON配置
     JSON_AS_ASCII = False
