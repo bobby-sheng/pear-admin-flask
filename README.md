@@ -97,9 +97,9 @@ python -m venv venv
 
 ```bash
 # 初 始 化 数 据 库
-flask init
-flask migrate
-flask upgrade
+flask db init
+flask db migrate
+flask db upgrade
 flask admin init
 ```
 

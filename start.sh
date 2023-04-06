@@ -1,1 +1,1 @@
-exec gunicorn -c gunicorn.conf.py "applications:create_app('development')"
+exec gunicorn -c gunicorn.conf.py "applications:create_app()"
