@@ -1,4 +1,4 @@
-layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'frame', 'theme', 'convert'],
+layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'frame', 'theme', 'convert','fullscreen'],
 	function(exports) {
 		"use strict";
 
@@ -11,7 +11,8 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 			pearMenu = layui.menu,
 			pearFrame = layui.frame,
 			pearTheme = layui.theme,
-			message = layui.message;
+			message = layui.message,
+			fullscreen=layui.fullscreen;
 
 		var bodyFrame;
 		var sideMenu;
@@ -19,7 +20,6 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 		var config;
 		var logout = function() {};
 		var msgInstance;
-
 		var body = $('body');
 
 		var pearAdmin = new function() {
@@ -93,8 +93,9 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						compatible();
 					},
 					done: function() {
+						sideMenu.isCollapse = param.menu.collapse;
 						sideMenu.selectItem(param.menu.select);
-						pearAdmin.collaspe(param);
+						pearAdmin.collapse(param);
 					}
 				});
 			}
@@ -115,6 +116,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						session: param.tab.session,
 						index: 0,
 						tabMax: param.tab.max,
+						preload: param.tab.preload,
 						closeEvent: function(id) {
 							sideMenu.selectItem(id);
 						},
@@ -150,9 +152,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 							icon: data.menuIcon,
 							close: true
 						}, 300);
-
 						compatible();
-
 					})
 				} else {
 					bodyFrame = pearFrame.render({
@@ -187,7 +187,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				localStorage.setItem("theme-color-color", currentColor.color);
 				localStorage.setItem("theme-color-second", currentColor.second);
 				pearTheme.changeTheme(window, isAutoHead(config));
-				
+
 				var menu = localStorage.getItem("theme-menu");
 				if (menu === null) {
 					menu = option.theme.defaultMenu;
@@ -196,7 +196,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						menu = option.theme.defaultMenu;
 					}
 				}
-				
+
 				var header = localStorage.getItem("theme-header");
 				if (header === null) {
 					header = option.theme.defaultHeader;
@@ -205,7 +205,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						header = option.theme.defaultHeader;
 					}
 				}
-				
+
 				var banner = localStorage.getItem("theme-banner");
 				if (banner === null) {
 					banner = option.theme.banner;
@@ -214,7 +214,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						banner = option.theme.banner;
 					}
 				}
-				
+
 				var autoHead = localStorage.getItem("auto-head");
 				if (autoHead === null) {
 					autoHead = option.other.autoHead;
@@ -223,7 +223,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						autoHead = option.other.autoHead;
 					}
 				}
-				
+
 				var muiltTab = localStorage.getItem("muilt-tab");
 				if (muiltTab === null) {
 					muiltTab = option.tab.enable;
@@ -232,7 +232,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						muiltTab = option.tab.enable;
 					}
 				}
-				
+
 				var control = localStorage.getItem("control");
 				if (control === null) {
 					control = option.menu.control;
@@ -241,30 +241,53 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						control = option.menu.control;
 					}
 				}
-				
-				localStorage.setItem("muilt-tab",muiltTab);
+
+				var footer = localStorage.getItem("footer");
+				if( footer === null) {
+					footer = option.other.footer;
+				}else{
+					if (option.theme.allowCustom === false) {
+						footer = option.other.footer;
+					}
+				}
+
+				localStorage.setItem("muilt-tab", muiltTab);
 				localStorage.setItem("theme-banner", banner);
 				localStorage.setItem("theme-menu", menu);
 				localStorage.setItem("theme-header", header);
 				localStorage.setItem("auto-head", autoHead);
-				localStorage.setItem("control",control);
+				localStorage.setItem("control", control);
+				localStorage.setItem("footer", footer);
 				this.menuSkin(menu);
 				this.headerSkin(header);
 				this.bannerSkin(banner);
+				this.footer(footer);
 			}
-			
+
+			this.footer = function(footer){
+				var bodyDOM = $(".pear-admin .layui-body");
+				var footerDOM = $(".pear-admin .layui-footer");
+				if (footer === true || footer === "true") {
+					footerDOM.removeClass("close");
+					bodyDOM.css("bottom", footerDOM.outerHeight());
+				} else {
+					footerDOM.addClass("close");
+					bodyDOM.css("bottom", "");
+				}
+			}
+
 			this.bannerSkin = function(theme) {
 				var pearAdmin = $(".pear-admin");
 				pearAdmin.removeClass("banner-layout");
-				if(theme === true || theme === "true") {
+				if (theme === true || theme === "true") {
 					pearAdmin.addClass("banner-layout");
 				}
 			}
 
-			this.collaspe = function(param) {
-				if (param.menu.collaspe) {
+			this.collapse = function(param) {
+				if (param.menu.collapse) {
 					if ($(window).width() >= 768) {
-						collaspe()
+						collapse()
 					}
 				}
 			}
@@ -275,7 +298,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				pearAdmin.removeClass("dark-theme");
 				pearAdmin.addClass(theme);
 			}
-			
+
 			this.headerSkin = function(theme) {
 				var pearAdmin = $(".pear-admin .layui-header");
 				pearAdmin.removeClass("light-theme");
@@ -293,8 +316,20 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				}
 			}
 
-			this.jump = function(id, title, url) {
-				if (isMuiltTab(config)==="true" || isMuiltTab(param) === true) {
+			this.collapseSide = function() {
+				collapse()
+			}
+
+			this.refreshThis = function() {
+				refresh()
+			}
+
+			this.refresh = function(id) {
+				$("iframe[id='"+ id +"']").attr('src', $("iframe[id='"+ id +"']").attr('src'));
+			}
+
+			this.addTab = function(id, title, url) {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
 					bodyTab.addTabOnly({
 						id: id,
 						title: title,
@@ -303,13 +338,81 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						close: true
 					}, 400);
 				} else {
+					return;
+				}
+			}
+
+			this.closeTab = function(id) {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
+					pearTab.delTabByElem('content', id, function(currentId){
+						sideMenu.selectItem(currentId);
+					});
+				} else {
+					return;
+				}
+			}
+
+			this.closeCurrentTab = function() {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
+					pearTab.delCurrentTabByElem('content', function(id){
+						sideMenu.selectItem(id);
+					});
+				} else {
+					return;
+				}
+			}
+			
+			this.closeOtherTab = function() {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
+					pearTab.delOtherTabByElem('content', function(id){
+						sideMenu.selectItem(id);
+					});
+				} else {
+					return;
+				}
+			}
+			
+			this.closeAllTab = function() {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
+					pearTab.delAllTabByElem('content', function(id){
+						sideMenu.selectItem(id);
+					});
+				} else {
+					return;
+				}
+			}
+
+			this.changeTabTitle = function(id, title) {
+				pearTab.changeTabTitleById('content', id ,title);
+			}
+			
+			this.changeIframe = function(id, title, url) {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
+					return;
+				} else {
 					sideMenu.selectItem(id);
 					bodyFrame.changePage(url, true);
 				}
 			}
 
-			this.refresh = function() {
-				refresh();
+			this.jump = function(id, title, url) {
+				if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
+					pearAdmin.addTab(id, title, url)
+				} else {
+					pearAdmin.changeIframe(id, title, url)
+				}
+			}
+			
+			this.fullScreen = function() {
+				if ($(".fullScreen").hasClass("layui-icon-screen-restore")) {
+					screenFun(2).then(function() {
+						$(".fullScreen").eq(0).removeClass("layui-icon-screen-restore");
+					});
+				} else {
+					screenFun(1).then(function() {
+						$(".fullScreen").eq(0).addClass("layui-icon-screen-restore");
+					});
+				}
 			}
 		};
 
@@ -320,8 +423,8 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 			refreshA.addClass("layui-anim-rotate");
 			refreshA.addClass("layui-anim-loop");
 			refreshA.addClass("layui-icon-loading");
-			if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) bodyTab.refresh(400);
-			else bodyFrame.refresh(400);
+			if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) bodyTab.refresh(true);
+			else bodyFrame.refresh(true);
 			setTimeout(function() {
 				refreshA.addClass("layui-icon-refresh-1");
 				refreshA.removeClass("layui-anim");
@@ -331,8 +434,8 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 			}, 600)
 		}
 
-		function collaspe() {
-			sideMenu.collaspe();
+		function collapse() {
+			sideMenu.collapse();
 			var admin = $(".pear-admin");
 			var left = $(".layui-icon-spread-left")
 			var right = $(".layui-icon-shrink-right")
@@ -340,37 +443,233 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				left.addClass("layui-icon-shrink-right")
 				left.removeClass("layui-icon-spread-left")
 				admin.removeClass("pear-mini");
+				sideMenu.isCollapse = false;
 			} else {
 				right.addClass("layui-icon-spread-left")
 				right.removeClass("layui-icon-shrink-right")
 				admin.addClass("pear-mini");
+				sideMenu.isCollapse = true;
 			}
 		}
 
 		body.on("click", ".logout", function() {
-			if (logout()) {
+			if (logout() && bodyTab) {
 				bodyTab.clear();
 			}
 		})
 
-		body.on("click", ".collaspe,.pear-cover", function() {
-			collaspe();
+		body.on("click", ".collapse,.pear-cover", function() {
+			collapse();
 		});
+
+		body.on("click", ".menuSearch", function () {
+			// 过滤菜单
+			var filterHandle = function (filterData, val) {
+				if (!val) return [];
+				var filteredMenus = [];
+				filterData = $.extend(true, {}, filterData);
+				$.each(filterData, function (index, item) {
+					if (item.children && item.children.length) {
+						var children = filterHandle(item.children, val)
+						var obj = $.extend({}, item, { children: children });
+						if (children && children.length) {
+							filteredMenus.push(obj);
+						} else if (item.title.indexOf(val) >= 0) {
+							item.children = []; // 父级匹配但子级不匹配,就去除子级
+							filteredMenus.push($.extend({}, item));
+						}
+					} else if (item.title.indexOf(val) >= 0) {
+						filteredMenus.push(item);
+					}
+				})
+				return filteredMenus;
+			}
+
+			// 树转路径
+			var tiledHandle = function (data) {
+				var tiledMenus = [];
+				var treeTiled = function (data, content) {
+					var path = "";
+					var separator = " / ";
+					// 上级路径
+					if (!content) content = "";
+					$.each(data, function (index, item) {
+						if (item.children && item.children.length) {
+							path += content + item.title + separator;
+							var childPath = treeTiled(item.children, path);
+							path += childPath;
+							if (!childPath) path = ""; // 重置路径
+						} else {
+							path += content + item.title
+							tiledMenus.push({ path: path, info: item });
+							path = ""; //重置路径
+						}
+					})
+					return path;
+				};
+				treeTiled(data);
+
+				return tiledMenus;
+			}
+
+			// 创建搜索列表
+			var createList = function (data) {
+				var _listHtml = '';
+				$.each(data, function (index, item) {
+					_listHtml += '<li smenu-id="' + item.info.id + '" smenu-icon="' + item.info.icon + '" smenu-url="' + item.info.href + '" smenu-title="' + item.info.title + '" smenu-type="' + item.info.type + '">';
+					_listHtml += '  <span><i style="margin-right:10px" class=" ' + item.info.icon + '"></i>' + item.path + '</span>';
+					_listHtml += '  <i class="layui-icon layui-icon-right"></i>';
+					_listHtml += '</li>'
+				})
+				return _listHtml;
+			}
+
+			var _html = [
+				'<div class="menu-search-content">',
+				'  <div class="layui-form menu-search-input-wrapper">',
+				'    <div class=" layui-input-wrap layui-input-wrap-prefix">',
+				'      <div class="layui-input-prefix">',
+				'        <i class="layui-icon layui-icon-search"></i>',
+				'      </div>',
+				'      <input type="text" name="menuSearch" value="" placeholder="搜索菜单" autocomplete="off" class="layui-input" lay-affix="clear">',
+				'    </div>',
+				'  </div>',
+				'  <div class="menu-search-no-data">暂无搜索结果</div>',
+				'  <ul class="menu-search-list">',
+				'  </ul>',
+				'</div>'
+			].join('');
+
+			layer.open({
+				type: 1,
+				offset: "10%",
+				area: ['600px'],
+				title: false,
+				closeBtn: 0,
+				shadeClose: true,
+				anim: 0,
+				move: false,
+				content: _html,
+				success: function(layero,layeridx){
+					var $layer = layero;
+					var $content = $(layero).children('.layui-layer-content');
+					var $input = $(".menu-search-input-wrapper input");
+					var $noData = $(".menu-search-no-data");
+					var $list = $(".menu-search-list");
+					var menuData = sideMenu.option.data;
+
+
+					$layer.css("border-radius", "6px");
+					$input.off("focus").focus();
+					// 搜索菜单
+					$input.off("input").on("input", debounce(function(){
+						var keywords = $input.val().trim();
+						var filteredMenus = filterHandle(menuData, keywords);
+
+						if(filteredMenus.length){
+							var tiledMenus = tiledHandle(filteredMenus);
+							var listHtml = createList(tiledMenus);
+							$noData.css("display", "none");
+							$list.html("").append(listHtml).children(":first").addClass("this")
+						}else{
+							$list.html("");
+							$noData.css("display", "flex");
+						}
+						var currentHeight = $(".menu-search-content").outerHeight()
+						$layer.css("height", currentHeight);
+						$content.css("height", currentHeight);
+					}, 500)
+					)
+					// 搜索列表点击事件
+					$list.off("click").on("click", "li", function () {
+						var menuId = $(this).attr("smenu-id");
+						var menuUrl = $(this).attr("smenu-url");
+						var menuIcon = $(this).attr("smenu-icon");
+						var menuTitle = $(this).attr("smenu-title");
+						var menuType = $(this).attr("smenu-type");
+						var openableWindow = menuType === "1" || menuType === 1;
+
+						if(sideMenu.isCollapse){
+							collapse();
+						}
+						if (openableWindow) {
+							pearAdmin.jump(menuId, menuTitle, menuUrl)
+						} else {
+							sideMenu.selectItem(menuId);
+						}
+						compatible();
+						layer.close(layeridx);
+					})
+
+					$list.off('mouseenter').on("mouseenter", "li", function () {
+						$(".menu-search-list li.this").removeClass("this");
+						$(this).addClass("this");
+					}).off("mouseleave").on("mouseleave", "li", function(){
+						$(this).removeClass("this");
+					})
+
+					// 监听键盘事件
+					// Enter:13 Spacebar:32 UpArrow:38 DownArrow:40 Esc:27
+					$(document).off("keydown").keydown(function (e) {
+						if (e.keyCode === 13 || e.keyCode === 32) {
+							e.preventDefault();
+							var menuId = $(".menu-search-list li.this").attr("smenu-id");
+							var menuUrl = $(".menu-search-list li.this").attr("smenu-url");
+							var menuTitle = $(".menu-search-list li.this").attr("smenu-title");
+							var menuType = $(".menu-search-list li.this").attr("smenu-type");
+							var openableWindow = menuType === "1" || menuType === 1;
+							if (sideMenu.isCollapse) {
+								collapse();
+							}
+							if (openableWindow) {
+								pearAdmin.jump(menuId, menuTitle, menuUrl)
+							} else {
+								sideMenu.selectItem(menuId);
+							}
+							compatible();
+							layer.close(layeridx);
+						}else if(e.keyCode === 38){
+							e.preventDefault();
+							var prevEl = $(".menu-search-list li.this").prev();
+							$(".menu-search-list li.this").removeClass("this");
+							if(prevEl.length !== 0){
+								prevEl.addClass("this");
+							}else{
+								$list.children().last().addClass("this");
+							}
+						}else if(e.keyCode === 40){
+							e.preventDefault();
+							var nextEl = $(".menu-search-list li.this").next();
+							$(".menu-search-list li.this").removeClass("this");
+							if(nextEl.length !== 0){
+								nextEl.addClass("this");
+							}else{
+								$list.children().first().addClass("this");
+							}
+						}else if(e.keyCode === 27){
+							e.preventDefault();
+							layer.close(layeridx);
+						}
+					})
+				}
+			})
+		});
+
 
 		body.on("click", ".fullScreen", function() {
 			if ($(this).hasClass("layui-icon-screen-restore")) {
-				screenFun(2).then(function() {
+				fullscreen.fullClose().then(function() {
 					$(".fullScreen").eq(0).removeClass("layui-icon-screen-restore");
 				});
 			} else {
-				screenFun(1).then(function() {
+				fullscreen.fullScreen().then(function() {
 					$(".fullScreen").eq(0).addClass("layui-icon-screen-restore");
 				});
 			}
 		});
 
 		body.on("click", '[user-menu-id]', function() {
-			if (isMuiltTab(config) === "true" || isMuiltTab(param) === true) {
+			if (isMuiltTab(config) === "true" || isMuiltTab(config) === true) {
 				bodyTab.addTabOnly({
 					id: $(this).attr("user-menu-id"),
 					title: $(this).attr("user-menu-title"),
@@ -408,7 +707,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				'<ul>\n' + menuItem + '</ul>\n' +
 				'</div>\n' +
 				'</div>';
-				
+
 			var headItem =
 				'<li class="layui-this" data-select-header="light-theme" >' +
 				'<a href="javascript:;" data-skin="skin-blue" style="" class="clearfix full-opacity-hover">' +
@@ -416,7 +715,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				'<div><span style="display:block; width: 20%; float: left; height: 40px; background: #28333E;"></span><span style="display:block; width: 80%; float: left; height: 40px; background: #f4f5f7;"></span></div>' +
 				'</a>' +
 				'</li>';
-			
+
 			headItem +=
 				'<li  data-select-header="dark-theme" >' +
 				'<a href="javascript:;" data-skin="skin-blue" style="" class="clearfix full-opacity-hover">' +
@@ -424,7 +723,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				'<div><span style="display:block; width: 20%; float: left; height: 40px; background: #28333E;"></span><span style="display:block; width: 80%; float: left; height: 40px; background: #f4f5f7;"></span></div>' +
 				'</a>' +
 				'</li>';
-			
+
 			var headHtml =
 				'<div class="pearone-color">\n' +
 				'<div class="color-title">顶部风格</div>\n' +
@@ -436,15 +735,18 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 			var moreItem =
 				'<div class="layui-form-item"><div class="layui-input-inline"><input type="checkbox" name="control" lay-filter="control" lay-skin="switch" lay-text="开|关"></div><span class="set-text">菜单</span></div>';
 
-			moreItem += 
+			moreItem +=
 				'<div class="layui-form-item"><div class="layui-input-inline"><input type="checkbox" name="muilt-tab" lay-filter="muilt-tab" lay-skin="switch" lay-text="开|关"></div><span class="set-text">视图</span></div>';
 
-			moreItem += 
+			moreItem +=
 				'<div class="layui-form-item"><div class="layui-input-inline"><input type="checkbox" name="banner" lay-filter="banner" lay-skin="switch" lay-text="开|关"></div><span class="set-text">通栏</span></div>';
 
 			moreItem +=
 				'<div class="layui-form-item"><div class="layui-input-inline"><input type="checkbox" name="auto-head" lay-filter="auto-head" lay-skin="switch" lay-text="开|关"></div><span class="set-text">通色</span></div>';
-			
+
+			moreItem +=
+				'<div class="layui-form-item"><div class="layui-input-inline"><input type="checkbox" name="footer" lay-filter="footer" lay-skin="switch" lay-text="开|关"></div><span class="set-text">页脚</span></div>';
+
 			var moreHtml = '<br><div class="pearone-color">\n' +
 				'<div class="color-title">更多设置</div>\n' +
 				'<div class="color-content">\n' +
@@ -463,7 +765,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				anim: -1,
 				skin: 'layer-anim-right',
 				move: false,
-				content: menuHtml + headHtml + buildColorHtml() + moreHtml + bottomTool(),
+				content: menuHtml + headHtml + buildColorHtml() + moreHtml,
 				success: function(layero, index) {
 
 					form.render();
@@ -496,15 +798,6 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						});
 					})
 
-					$('#closeTheme').click(function() {
-						var $layero = $('#layui-layer' + index);
-						$layero.animate({
-							left: $layero.offset().left + $layero.width()
-						}, 200, function() {
-							layer.close(index);
-						});
-					})
-
 					form.on('switch(control)', function(data) {
 						localStorage.setItem("control", this.checked);
 						window.location.reload();
@@ -514,17 +807,22 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 						localStorage.setItem("muilt-tab", this.checked);
 						window.location.reload();
 					})
-					
+
 					form.on('switch(auto-head)', function(data) {
 						localStorage.setItem("auto-head", this.checked);
 						pearTheme.changeTheme(window, this.checked);
 					})
-					
+
 					form.on('switch(banner)', function(data) {
 						localStorage.setItem("theme-banner", this.checked);
 						pearAdmin.bannerSkin(this.checked);
 					})
-					
+
+					form.on('switch(footer)', function (data) {
+						localStorage.setItem("footer", this.checked);
+						pearAdmin.footer(this.checked);
+					})
+
 					if (localStorage.getItem('theme-banner') === 'true') {
 						$('input[name="banner"]').attr('checked', 'checked')
 					} else {
@@ -536,28 +834,29 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 					} else {
 						$('input[name="control"]').removeAttr('checked')
 					}
-					
+
 					if (localStorage.getItem('muilt-tab') === 'true') {
 						$('input[name="muilt-tab"]').attr('checked', 'checked')
 					} else {
 						$('input[name="muilt-tab"]').removeAttr('checked')
 					}
-					
+
 					if (localStorage.getItem('auto-head') === 'true') {
 						$('input[name="auto-head"]').attr('checked', 'checked')
 					} else {
 						$('input[name="auto-head"]').removeAttr('checked')
 					}
-					
-					form.render('checkbox');
 
+					if (localStorage.getItem('footer') === 'true') {
+						$('input[name="footer"]').attr('checked', 'checked')
+					} else {
+						$('input[name="footer"]').removeAttr('checked')
+					}
+
+					form.render('checkbox');
 				}
 			});
 		});
-
-		function bottomTool() {
-			return "<button id='closeTheme' style='position: absolute;bottom: 20px;left: 20px;' class='pear-btn'>关闭</button>"
-		}
 
 		body.on('click', '[data-select-bgcolor]', function() {
 			var theme = $(this).attr('data-select-bgcolor');
@@ -566,7 +865,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 			localStorage.setItem("theme-menu", theme);
 			pearAdmin.menuSkin(theme);
 		});
-		
+
 		body.on('click', '[data-select-header]', function() {
 			var theme = $(this).attr('data-select-header');
 			$('[data-select-header]').removeClass("layui-this");
@@ -629,48 +928,8 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 
 		function compatible() {
 			if ($(window).width() <= 768) {
-				collaspe()
+				collapse()
 			}
-		}
-
-		function screenFun(num) {
-			num = num || 1;
-			num = num * 1;
-			var docElm = document.documentElement;
-			switch (num) {
-				case 1:
-					if (docElm.requestFullscreen) {
-						docElm.requestFullscreen();
-					} else if (docElm.mozRequestFullScreen) {
-						docElm.mozRequestFullScreen();
-					} else if (docElm.webkitRequestFullScreen) {
-						docElm.webkitRequestFullScreen();
-					} else if (docElm.msRequestFullscreen) {
-						docElm.msRequestFullscreen();
-					}
-					break;
-				case 2:
-					if (document.exitFullscreen) {
-						document.exitFullscreen();
-					} else if (document.mozCancelFullScreen) {
-						document.mozCancelFullScreen();
-					} else if (document.webkitCancelFullScreen) {
-						document.webkitCancelFullScreen();
-					} else if (document.msExitFullscreen) {
-						document.msExitFullscreen();
-					}
-					break;
-			}
-			return new Promise(function(res, rej) {
-				res("返回值");
-			});
-		}
-
-		function isFullscreen() {
-			return document.fullscreenElement ||
-				document.msFullscreenElement ||
-				document.mozFullScreenElement ||
-				document.webkitFullscreenElement || false;
 		}
 
 		function isControl(option) {
@@ -684,19 +943,19 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				return option.menu.control
 			}
 		}
-		
+
 		function isAutoHead(option) {
-			if(option.theme.allowCustom) {
-				if(localStorage.getItem("auto-head") != null) {
+			if (option.theme.allowCustom) {
+				if (localStorage.getItem("auto-head") != null) {
 					return localStorage.getItem("auto-head");
 				} else {
-					return option.other.autoHead; 
+					return option.other.autoHead;
 				}
 			} else {
 				return option.other.autoHead;
 			}
 		}
-		
+
 		function isMuiltTab(option) {
 			if (option.theme.allowCustom) {
 				if (localStorage.getItem("muilt-tab") != null) {
@@ -710,10 +969,28 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 		}
 
 		window.onresize = function() {
-			if (!isFullscreen()) {
+			if (!fullscreen.isFullscreen()) {
 				$(".fullScreen").eq(0).removeClass("layui-icon-screen-restore");
 			}
 		}
 
+		$(window).on('resize', debounce(function () {
+			if (sideMenu && !sideMenu.isCollapse && $(window).width() <= 768) {
+				collapse();
+			}
+		},50));
+
+		function debounce(fn, awaitTime) {
+			var timerID = null
+			return function () {
+				var arg = arguments[0]
+				if (timerID) {
+					clearTimeout(timerID)
+				}
+				timerID = setTimeout(function () {
+					fn(arg)
+				}, awaitTime)
+			}
+		}
 		exports('admin', pearAdmin);
 	})
