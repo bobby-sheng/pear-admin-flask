@@ -1,5 +1,4 @@
 import logging
-import os
 from urllib.parse import quote_plus as urlquote
 
 from apscheduler.executors.pool import ThreadPoolExecutor
@@ -104,29 +103,3 @@ class BaseConfig:
     #    'testSQLite': 'sqlite:///database.db
     # }
 
-
-class TestingConfig(BaseConfig):
-    """ 测试配置 """
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # 内存数据库
-
-
-class DevelopmentConfig(BaseConfig):
-    """ 开发配置 """
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_ECHO = False
-
-
-class ProductionConfig(BaseConfig):
-    """生成环境配置"""
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ECHO = False
-    SQLALCHEMY_POOL_RECYCLE = 8
-
-    LOG_LEVEL = logging.ERROR
-
-
-config = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig
-}
