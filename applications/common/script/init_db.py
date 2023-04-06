@@ -686,4 +686,4 @@ def init_db():
     print("用户角色数据存入")
     add_role_power()
     print("角色权限数据存入")
-    print("数据初始化完成,请使用flask run命令运行")
+    print("数据初始化完成,请使用python app.py命令运行")
