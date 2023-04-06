@@ -9,8 +9,6 @@ marshmallow-sqlalchemy
 PyMySQL
 psutil
 Flask-Mail
-sqlparse
 Pillow
-python-dotenv
 validators
 cryptography

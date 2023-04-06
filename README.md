@@ -106,7 +106,6 @@ pip install -r requirement\dev.txt
 #### 修改配置
 
 ```python
-.env
 # MySql配置信息
 MYSQL_HOST=127.0.0.1
 MYSQL_PORT=3306
@@ -137,7 +136,9 @@ python -m venv venv
 
 ```bash
 # 初 始 化 数 据 库
-
+flask init
+flask migrate
+flask upgrade
 flask init
 ```
 

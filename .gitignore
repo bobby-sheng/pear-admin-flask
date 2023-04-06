@@ -116,5 +116,5 @@ dmypy.json
 
 #ide
 .idea/
-## 迁移文件
-#migrations/
+# 迁移文件
+migrations/
