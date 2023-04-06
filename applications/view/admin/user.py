@@ -70,7 +70,7 @@ def add():
 @admin_user.post('/save')
 @authorize("admin:user:add", log=True)
 def save():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     a = req_json.get("roleIds")
     username = str_escape(req_json.get('username'))
     real_name = str_escape(req_json.get('realName'))
@@ -122,7 +122,7 @@ def edit(id):
 @admin_user.put('/update')
 @authorize("admin:user:edit", log=True)
 def update():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     a = str_escape(req_json.get("roleIds"))
     id = str_escape(req_json.get("userId"))
     username = str_escape(req_json.get('username'))
@@ -160,7 +160,7 @@ def profile():
 @admin_user.put('/updateAvatar')
 @login_required
 def update_avatar():
-    url = request.json.get("avatar").get("src")
+    url = request.get_json(force=True).get("avatar").get("src")
     r = User.query.filter_by(id=current_user.id).update({"avatar": url})
     db.session.commit()
     if not r:
@@ -172,7 +172,7 @@ def update_avatar():
 @admin_user.put('/updateInfo')
 @login_required
 def update_info():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     r = User.query.filter_by(id=current_user.id).update(
         {"realname": req_json.get("realName"), "remark": req_json.get("details")})
     db.session.commit()
@@ -192,7 +192,7 @@ def edit_password():
 @admin_user.put('/editPassword')
 @login_required
 def edit_password_put():
-    res_json = request.json
+    res_json = request.get_json(force=True)
     if res_json.get("newPassword") == '':
         return fail_api("新密码不得为空")
     if res_json.get("newPassword") != res_json.get("confirmPassword"):
@@ -211,7 +211,7 @@ def edit_password_put():
 @admin_user.put('/enable')
 @authorize("admin:user:edit", log=True)
 def enable():
-    _id = request.json.get('userId')
+    _id = request.get_json(force=True).get('userId')
     if _id:
         res = enable_status(model=User, id=_id)
         if not res:
@@ -224,7 +224,7 @@ def enable():
 @admin_user.put('/disable')
 @authorize("admin:user:edit", log=True)
 def dis_enable():
-    _id = request.json.get('userId')
+    _id = request.get_json(force=True).get('userId')
     if _id:
         res = disable_status(model=User, id=_id)
         if not res:

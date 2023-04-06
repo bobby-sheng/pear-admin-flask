@@ -51,7 +51,7 @@ def select_parent():
 @admin_power.post('/save')
 @authorize("admin:power:add", log=True)
 def save():
-    req = request.json
+    req = request.get_json(force=True)
     icon = str_escape(req.get("icon"))
     openType = str_escape(req.get("openType"))
     parentId = str_escape(req.get("parentId"))
@@ -93,8 +93,8 @@ def edit(_id):
 @admin_power.put('/update')
 @authorize("admin:power:edit", log=True)
 def update():
-    req_json = request.json
-    id = request.json.get("powerId")
+    req_json = request.get_json(force=True)
+    id = request.get_json(force=True).get("powerId")
     data = {
         "icon": str_escape(req_json.get("icon")),
         "open_type": str_escape(req_json.get("openType")),
@@ -116,7 +116,7 @@ def update():
 @admin_power.put('/enable')
 @authorize("admin:power:edit", log=True)
 def enable():
-    _id = request.json.get('powerId')
+    _id = request.get_json(force=True).get('powerId')
     if id:
         res = curd.enable_status(Power, _id)
         if not res:
@@ -129,7 +129,7 @@ def enable():
 @admin_power.put('/disable')
 @authorize("admin:power:edit", log=True)
 def dis_enable():
-    _id = request.json.get('powerId')
+    _id = request.get_json(force=True).get('powerId')
     if id:
         res = curd.disable_status(Power, _id)
         if not res:

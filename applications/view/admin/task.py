@@ -38,12 +38,12 @@ def add():
 
 @admin_task.post('/save')
 def save():
-    _id = request.json.get("id")
-    name = request.json.get("id")
-    type = request.json.get("type")
-    functions = request.json.get("functions")
-    datetime = request.json.get("datetime")
-    time = request.json.get("time")
+    _id = request.get_json(force=True).get("id")
+    name = request.get_json(force=True).get("id")
+    type = request.get_json(force=True).get("type")
+    functions = request.get_json(force=True).get("functions")
+    datetime = request.get_json(force=True).get("datetime")
+    time = request.get_json(force=True).get("time")
     if not hasattr(tasks, functions):
         return fail_api()
     if type == 'date':
@@ -87,7 +87,7 @@ def save():
 # 恢复
 @admin_task.put('/enable')
 def enable():
-    _id = request.json.get('id')
+    _id = request.get_json(force=True).get('id')
     # print(id)
     if _id:
         scheduler.resume_job(str(_id))
@@ -98,7 +98,7 @@ def enable():
 # 暂停
 @admin_task.put('/disable')
 def dis_enable():
-    _id = request.json.get('id')
+    _id = request.get_json(force=True).get('id')
     if _id:
         scheduler.pause_job(str(_id))
         return success_api(msg="暂停成功")

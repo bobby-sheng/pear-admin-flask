@@ -54,7 +54,7 @@ def add():
 @admin_mail.post('/save')
 @authorize("admin:mail:add", log=True)
 def save():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     receiver = str_escape(req_json.get("receiver"))
     subject = str_escape(req_json.get('subject'))
     content = str_escape(req_json.get('content'))

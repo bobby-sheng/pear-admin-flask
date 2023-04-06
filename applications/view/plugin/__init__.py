@@ -84,7 +84,7 @@ def data():
 @authorize("admin:plugin:enable", log=True)
 def enable():
     """启用插件"""
-    plugin_folder_name = request.json.get('plugin_folder_name')
+    plugin_folder_name = request.get_json(force=True).get('plugin_folder_name')
     if plugin_folder_name:
         try:
             if plugin_folder_name not in PLUGIN_ENABLE_FOLDERS:
@@ -118,7 +118,7 @@ def enable():
 @authorize("admin:plugin:enable", log=True)
 def disable():
     """禁用插件"""
-    plugin_folder_name = request.json.get('plugin_folder_name')
+    plugin_folder_name = request.get_json(force=True).get('plugin_folder_name')
     if plugin_folder_name:
         try:
             if plugin_folder_name in PLUGIN_ENABLE_FOLDERS:

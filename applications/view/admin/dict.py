@@ -45,7 +45,7 @@ def dict_type_add():
 @admin_dict.post('/dictType/save')
 @authorize("admin:dict:add", log=True)
 def dict_type_save():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     description = str_escape(req_json.get("description"))
     enable = str_escape(req_json.get("enable"))
     type_code = str_escape(req_json.get("typeCode"))
@@ -71,7 +71,7 @@ def dict_type_edit():
 @admin_dict.put('/dictType/update')
 @authorize("admin:dict:edit", log=True)
 def dict_type_update():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     id = str_escape(req_json.get("id"))
     description = str_escape(req_json.get("description"))
     enable = str_escape(req_json.get("enable"))
@@ -91,7 +91,7 @@ def dict_type_update():
 @admin_dict.put('/dictType/enable')
 @authorize("admin:dict:edit", log=True)
 def dict_type_enable():
-    _id = request.json.get('id')
+    _id = request.get_json(force=True).get('id')
     if id:
         res = curd.enable_status(DictType,_id)
         if not res:
@@ -104,7 +104,7 @@ def dict_type_enable():
 @admin_dict.put('/dictType/disable')
 @authorize("admin:dict:edit", log=True)
 def dict_type_dis_enable():
-    _id = request.json.get('id')
+    _id = request.get_json(force=True).get('id')
     if id:
         res = curd.disable_status(DictType,_id)
         if not res:
@@ -145,7 +145,7 @@ def dict_data_add():
 @admin_dict.post('/dictData/save')
 @authorize("admin:dict:add", log=True)
 def dict_data_save():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     data_label = str_escape(req_json.get("dataLabel"))
     data_value = str_escape(req_json.get("dataValue"))
     enable = str_escape(req_json.get("enable"))
@@ -172,7 +172,7 @@ def dict_data_edit():
 @admin_dict.put('/dictData/update')
 @authorize("admin:dict:edit", log=True)
 def dict_data_update():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     id = req_json.get("dataId")
     DictData.query.filter_by(id=id).update({
         "data_label": str_escape(req_json.get("dataLabel")),
@@ -189,7 +189,7 @@ def dict_data_update():
 @admin_dict.put('/dictData/enable')
 @authorize("admin:dict:edit", log=True)
 def dict_data_enable():
-    _id = request.json.get('dataId')
+    _id = request.get_json(force=True).get('dataId')
     if _id:
         res = curd.enable_status(model=DictData, id=_id)
         if not res:
@@ -202,7 +202,7 @@ def dict_data_enable():
 @admin_dict.put('/dictData/disable')
 @authorize("admin:dict:edit", log=True)
 def dict_data_disenable():
-    _id = request.json.get('dataId')
+    _id = request.get_json(force=True).get('dataId')
     if _id:
         res = curd.disable_status(model=DictData, id=_id)
         if not res:

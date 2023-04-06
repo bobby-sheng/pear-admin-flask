@@ -44,7 +44,7 @@ def add():
 @admin_role.post('/save')
 @authorize("admin:role:add", log=True)
 def save():
-    req = request.json
+    req = request.get_json(force=True)
     details = str_escape(req.get("details"))
     enable = str_escape(req.get("enable"))
     roleCode = str_escape(req.get("roleCode"))
@@ -122,7 +122,7 @@ def edit(id):
 @admin_role.put('/update')
 @authorize("admin:role:edit", log=True)
 def update():
-    req_json = request.json
+    req_json = request.get_json(force=True)
     id = req_json.get("roleId")
     data = {
         "code": str_escape(req_json.get("roleCode")),
@@ -142,7 +142,7 @@ def update():
 @admin_role.put('/enable')
 @authorize("admin:role:edit", log=True)
 def enable():
-    id = request.json.get('roleId')
+    id = request.get_json(force=True).get('roleId')
     if id:
         res = enable_status(Role, id)
         if not res:
@@ -155,7 +155,7 @@ def enable():
 @admin_role.put('/disable')
 @authorize("admin:role:edit", log=True)
 def dis_enable():
-    _id = request.json.get('roleId')
+    _id = request.get_json(force=True).get('roleId')
     if _id:
         res = disable_status(Role, _id)
         if not res:
