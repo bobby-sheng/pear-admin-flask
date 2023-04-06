@@ -71,11 +71,11 @@ def login_post():
                     continue
                 user_power.append(p.code)
         session['permissions'] = user_power
-        # 角色存入session
-        roles = []
-        for role in current_user.role.all():
-            roles.append(role.id)
-        session['role'] = [roles]
+        # # 角色存入session
+        # roles = []
+        # for role in current_user.role.all():
+        #     roles.append(role.id)
+        # session['role'] = [roles]
 
         return success_api(msg="登录成功")
     login_log(request, uid=user.id, is_access=False)

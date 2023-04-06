@@ -13,3 +13,4 @@ sqlparse
 Pillow
 python-dotenv
 validators
+cryptography

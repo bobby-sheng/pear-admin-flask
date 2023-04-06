@@ -1,6 +1,6 @@
 from functools import wraps
-from flask import abort, request, jsonify, session
-from flask_login import login_required
+from flask import abort, request, jsonify, session, current_app
+from flask_login import login_required, current_user
 from applications.common.admin_log import admin_log
 
 
@@ -17,7 +17,7 @@ def authorize(power: str, log: bool = False):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # 定义管理员的id为1
-            if 1 in session.get('role')[0]:
+            if current_user.username == current_app.config.get("SUPERADMIN"):
                 return func(*args, **kwargs)
             if not power in session.get('permissions'):
                 if log:

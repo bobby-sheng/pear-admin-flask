@@ -1,8 +1,6 @@
-from flask import Blueprint, Flask
+from flask import Flask
 
-rights_bp = Blueprint('rights', __name__, url_prefix='/rights')
-
-from . import routes
+from .routes import rights_bp
 
 
 def register_rights_view(app: Flask):

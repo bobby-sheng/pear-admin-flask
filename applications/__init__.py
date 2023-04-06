@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 
-from applications.common.script import init_script
+from applications.common.script import admin_cli
 from applications.extensions import init_plugs
 from applications.view import init_view
 from applications.configs import config
@@ -24,7 +24,7 @@ def create_app(config_name=None):
     init_view(app)
 
     # 注册命令
-    init_script(app)
+    app.cli.add_command(admin_cli)
 
     if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
         logo()

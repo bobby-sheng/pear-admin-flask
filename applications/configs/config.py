@@ -5,22 +5,15 @@ from urllib.parse import quote_plus as urlquote
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
-# 强制读入 flaskenv 中的环境变量
-with open(".flaskenv", "r", encoding='utf-8') as f:
-    for line in f.read().split("\n"):
-        pos = line.find("#")
-        if pos != -1:
-            line = line[:pos]
-        line = line.strip()
-        if line == "":
-            continue
-        _ = line.split("=")
-        key, value = _[0], '='.join(_[1:])
-        os.environ[key.strip()] = value.strip()
 
 class BaseConfig:
+    DEBUG = True
+    HOST = '127.0.0.1'
+    PORT = 5000
 
-    SYSTEM_NAME = os.getenv('SYSTEM_NAME', 'Pear Admin')
+    SUPERADMIN = 'admin'
+
+    SYSTEM_NAME = 'Pear Admin'
     # 主题面板的链接列表配置
     SYSTEM_PANEL_LINKS = [
         {
@@ -47,18 +40,18 @@ class BaseConfig:
     # JSON配置
     JSON_AS_ASCII = False
 
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev key')
+    SECRET_KEY = "pear-admin-flask"
 
     # redis配置
-    REDIS_HOST = os.getenv('REDIS_HOST') or "127.0.0.1"
-    REDIS_PORT = int(os.getenv('REDIS_PORT') or 6379)
+    REDIS_HOST = "127.0.0.1"
+    REDIS_PORT = 6379
 
     # mysql 配置
-    MYSQL_USERNAME = os.getenv('MYSQL_USERNAME') or "root"
-    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD') or "123456"
-    MYSQL_HOST = os.getenv('MYSQL_HOST') or "127.0.0.1"
-    MYSQL_PORT = int(os.getenv('MYSQL_PORT') or 3306)
-    MYSQL_DATABASE = os.getenv('MYSQL_DATABASE') or "PearAdminFlask"
+    MYSQL_USERNAME = "root"
+    MYSQL_PASSWORD = "123456"
+    MYSQL_HOST = "127.0.0.1"
+    MYSQL_PORT = 3306
+    MYSQL_DATABASE = "PearAdminFlask1"
 
     # mysql 数据库的配置信息
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USERNAME}:{urlquote(MYSQL_PASSWORD)}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}?charset=utf8mb4"
@@ -66,19 +59,19 @@ class BaseConfig:
     # 默认日志等级
     LOG_LEVEL = logging.WARN
     #
-    MAIL_SERVER = os.getenv('MAIL_SERVER') or 'smtp.qq.com'
+    MAIL_SERVER = 'smtp.qq.com'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_PORT = 465
-    MAIL_USERNAME = os.getenv('MAIL_USERNAME') or '123@qq.com'
-    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD') or 'XXXXX'  # 生成的授权码
-    # 默认发件人的邮箱,这里填写和MAIL_USERNAME一致即可
-    MAIL_DEFAULT_SENDER = ('pear admin', os.getenv('MAIL_USERNAME') or '123@qq.com')
+    MAIL_USERNAME = '123@qq.com'
+    MAIL_PASSWORD = 'XXXXX'  # 生成的授权码
+    MAIL_DEFAULT_SENDER = MAIL_USERNAME
 
     # 設置 APSCHEDULER 參數
-    SCHEDULER_API_ENABLED = os.getenv('SCHEDULER_API_ENABLED') or False
+    SCHEDULER_API_ENABLED = False
     SCHEDULER_JOBSTORES: dict = {
-        'default': SQLAlchemyJobStore(url=f'mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}')
+        'default': SQLAlchemyJobStore(
+            url=f'mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}')
     }
     SCHEDULER_EXECUTORS: dict = {
         'default': ThreadPoolExecutor(20)
@@ -87,11 +80,11 @@ class BaseConfig:
         'coalesce': False,
         'max_instances': 3
     }
-    
+
     # 插件配置
-    PLUGIN_ENABLE_FOLDERS = os.getenv('PLUGIN_ENABLE_FOLDERS')
-    
-     # 配置多个数据库连接的连接串写法示例
+    PLUGIN_ENABLE_FOLDERS = ["helloworld"]
+
+    # 配置多个数据库连接的连接串写法示例
     # HOSTNAME: 指数据库的IP地址、USERNAME：指数据库登录的用户名、PASSWORD：指数据库登录密码、PORT：指数据库开放的端口、DATABASE：指需要连接的数据库名称
     # MSSQL:    f"mssql+pymssql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=cp936"
     # MySQL:    f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
@@ -109,8 +102,7 @@ class BaseConfig:
     #    'testMsSQL': 'mssql+pymssql://test:123456@192.168.1.1:1433/test?charset=cp936',
     #    'testOracle': 'oracle+cx_oracle://test:123456@192.168.1.1:1521/test',
     #    'testSQLite': 'sqlite:///database.db
-    #}
-
+    # }
 
 
 class TestingConfig(BaseConfig):
