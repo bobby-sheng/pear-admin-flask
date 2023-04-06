@@ -1,3 +1,7 @@
-from flask.cli import AppGroup
+from flask import Flask
 
-admin_cli = AppGroup("admin")
+from .admin import admin_cli
+
+
+def init_script(app: Flask):
+    app.cli.add_command(admin_cli)
