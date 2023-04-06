@@ -100,7 +100,7 @@ python -m venv venv
 flask init
 flask migrate
 flask upgrade
-flask init
+flask admin init
 ```
 
 执行 python app.py 命令启动项目
