@@ -1,14 +1,41 @@
 version: '3'
 services:
-  flask:
-    build: .
-    ports:
-      - "8000:8000"
-    restart: always
-    links:
-      - mysql:dbserver
   mysql:
     image: "mysql:5.7"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
+    container_name: mysql
     restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./dockerdata/mysql/log:/usr/local/mysql/log"
+      - "./dockerdata/mysql/data:/var/lib/mysql"
+      - "./dockerdata/mysql/my.cnf:/etc/my.cnf"
+      - "./dockerdata/mysql/initdb:/docker-entrypoint-initdb.d"
+    environment:
+      LANG: C.UTF-8
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+    networks:
+      flask-network:
+        ipv4_address: 172.10.1.31
+
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: flask
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    networks:
+      flask-network:
+        ipv4_address: 172.10.1.11
+
+networks:
+  flask-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.0.0/16

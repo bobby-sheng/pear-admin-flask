@@ -57,10 +57,7 @@ Pear Admin Flask 基于 Flask 的后台管理系统，拥抱应用广泛的pytho
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
 # 安 装
-pip install -r requirement\dev.txt
-
-# 配 置
-.env
+pip install -r requirements.txt
 
 ```
 
@@ -115,6 +112,24 @@ flask new --type view --name test/a
 # 自动注册蓝图
 # 访问http://127.0.0.1:5000/test/a/
 ```
+
+#### 使用docker-compose运行项目
+```bash
+#安装docker-compose 
+curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose 
+
+docker-compose --version
+docker-compose up -d # -d后台运行
+docker-compose stop # 停止启动
+docker-compose down # 清除容器
+
+dockerdata/config.py # 配置文件
+dockerdata/mysql/initdb/ # MySQL初始化数据在 
+rm -rf dockerdata/mysql/{log,data}/* # down掉容器后启动需要清除删除log,dat
+```
+
 Pear Admin Flask 还有以下几个版本：					
 
 **[mini 分支版本](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)**
