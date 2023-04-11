@@ -1,0 +1,16 @@
+FROM 1004947301/python3.7-flask:pillow
+
+LABEL "author"="liuyiyangwang"
+LABEL "blog"="https://gitee.com/liuyiyangwang"
+
+COPY . /app/
+COPY dockerdata/config.py /app/applications/
+COPY dockerdata/start.sh /app
+
+WORKDIR /app/
+
+ENV TIME_ZONE Asia/Shanghai
+
+RUN chmod +x /app/start.sh
+
+CMD ./start.sh
