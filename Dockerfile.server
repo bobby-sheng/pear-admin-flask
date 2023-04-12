@@ -1,7 +1,4 @@
-FROM 1004947301/python3.7-flask:pillow
-
-LABEL "author"="liuyiyangwang"
-LABEL "blog"="https://gitee.com/liuyiyangwang"
+FROM pearadminflask/python3.7-flask:pillow
 
 COPY . /app/
 COPY dockerdata/config.py /app/applications/
