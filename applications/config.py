@@ -80,7 +80,7 @@ class BaseConfig:
         'max_instances': 3
     }
 
-    # 插件配置，填写插件的文件名名称，默认不启用插件
+    # 插件配置，填写插件的文件名名称，默认不启用插件。
     PLUGIN_ENABLE_FOLDERS = []
 
     # 配置多个数据库连接的连接串写法示例
