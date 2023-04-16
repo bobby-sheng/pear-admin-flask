@@ -11,4 +11,4 @@ def init_view(app):
     register_rights_view(app)
     register_passport_views(app)
     register_dept_views(app)
-    # register_plugin_views(app)
+    register_plugin_views(app)

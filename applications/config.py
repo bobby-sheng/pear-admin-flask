@@ -46,8 +46,8 @@ class BaseConfig:
     REDIS_PORT = 6379
 
     # mysql 配置
-    MYSQL_USERNAME = "root"
-    MYSQL_PASSWORD = "123456"
+    MYSQL_USERNAME = "PearAdminFlask"
+    MYSQL_PASSWORD = "hcCNtYR5GFtRwMab"
     MYSQL_HOST = "127.0.0.1"
     MYSQL_PORT = 3306
     MYSQL_DATABASE = "PearAdminFlask"
