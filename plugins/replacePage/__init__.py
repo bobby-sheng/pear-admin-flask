@@ -8,15 +8,6 @@ from flask import Flask, render_template_string
 dir_path = os.path.dirname(__file__).replace("\\", "/")
 folder_name = dir_path[dir_path.rfind("/") + 1:]  # 插件文件夹名称
 
-def event_enable():
-    """当此插件被启用时会调用此处"""
-    print(f"启用插件，dir_path: {dir_path} ; folder_name: {folder_name}")
-
-
-def event_disable():
-    """当此插件被禁用时会调用此处"""
-    print(f"禁用插件，dir_path: {dir_path} ; folder_name: {folder_name}")
-
 def event_init(app: Flask):
     """初始化完成时会调用这里"""
     # 使用下面的代码 查看所有注册的视图函数。对于 Flask app.route 函数的实现，请参考 https://www.jianshu.com/p/dff3bc2f4836

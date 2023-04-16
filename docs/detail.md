@@ -1,140 +1,44 @@
-### 权限管理 :id=authorize
+## 项目介绍  :id=start
 
-使用装饰器 @authorize时需要注意，该装饰器需要写在	@app.route	之后
+欢迎阅读 Pear Admin Flask 的开发文档！Pear Admin Flask 是一个基于 Flask 的后台管理系统，拥抱应用广泛的 Python 语言，通过使用本系统，即可快速构建你的功能业务。
 
-```python
-@authorize(power: str, log: bool)
-```
+项目旨在为 Python 开发者提供一个后台管理系统的模板，成为您构建信息管理系统、物联网后台等应用时灵活、简单的工具。
 
-第一个参数为权限 code
+同时，Pear Admin Flask 项目也是一个对于 Python 初学者友好的项目。此项目处于开发初期，欢迎各位 Python 爱好者加入到 Pear Admin Flask 项目建设中来。如果您在使用此项目的过程中，发现项目代码存在问题，请在 Gitee 上提交 PR ，一起开源共建！
 
-第二个参数为是否生成日志
+接下来，我们将会为您详细介绍该项目搭建方法与开发架构。
 
-```python
-# 例如
-@authorize("admin:power:remove", log=True)
-```
+> 如果对项目有不理解的地方欢迎加入我们的讨论群。
 
-在前端中，例如增加，删除按钮，对于没有编辑权限的用户不显示的话，可以使用
+![QQ群](assets/qqgroup.jpg)
 
- `{% **if** authorize("admin:user:edit") %}`
+> 微信群不定期在qq群更新二维码。
 
- `{% endif %}`
+![开始使用](assets/界面演示.jpeg)
 
-例如
+**[master分支版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)**
 
-```python
-	{% if authorize("admin:user:edit") %}
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
-    	<i class="pear-icon pear-icon-edit"></i>
-        </button>
-    {% endif %}
-    {% if authorize("admin:user:remove") %}
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
-        <i class="pear-icon pear-icon-ashbin"></i>
-        </button>
-    {% endif %}
-```
+flask 2.0.1 +	flask-sqlalchemy + 权限验证 + Flask-APScheduler 定时任务 + marshmallow 序列化与数据验证
 
-## model序列化 :id=Schema
+master 分支为主分支，是功能最全、页面最多的分支。
 
-- sqlalchemy查询的model对象转dict
+![开始使用](assets/界面演示.jpeg)
 
-  
-```
- model_to_dicts(Schema, model)
-```
-
-Schema 是  序列化类,我把他放在了models文件里，觉得没有必要见一个文件夹叫Schema，也方便看着模型写序列化类
-
-```python
-# 例如
-class DeptSchema(ma.Schema):  # 序列化类
-    deptId = fields.Integer(attribute="id")
-    parentId = fields.Integer(attribute="parent_id")
-    deptName = fields.Str(attribute="dept_name")
-    leader = fields.Str()
-    phone = fields.Str()
-    email = fields.Str()
-    address = fields.Str()
-    status = fields.Str()
-    sort = fields.Str()
-```
-
->这一部分有问题的话请看marshmallow文档
-
-model写的是查询后的对象
-
-```python
-dept = Dept.query.order_by(Dept.sort).all()
-```
-
-进行序列化
-
-```python
-res = model_to_dicts(Schema=DeptSchema, model=dept)
-```
-
-## 构造查询过滤
-
-```python
-# 准确查询字段
-# 不等于查询字段
-# 大于查询字段
-# 小于查询字段
-# 模糊查询字段(%+xxx+%)
-# 左模糊 (% + xxx) 
-# 右模糊查询字段(xxx+ %)
-# 包含查询字段
-#范围查询字段
-# 查询
-```
-
-## xss过滤
-
-```python
-from applications.common.utils.validate import str_escape
-details = str_escape(req.get("details"))
-```
+## 下载使用  :id=download
 
 
+#### 1. 官网地址
 
-## 邮件发送
+官网提供稳定版本的 Release 发行版本 [前往](http://www.pearadmin.com)
 
-```python
-#在.flaskenv中配置邮箱
+![官方网址](assets/官网地址.jpg)
 
-from applications/common/utils/mail import send_main
-send_mail(subject='title', recipients=['123@qq.com'], content='body')
-```
+#### 2. 源码仓库
 
+如果你需要最新代码，请前往 Gitee 仓库 [前往](https://gitee.com/pear-admin/pear-admin-flask)
 
-
-## 返回格式
-
-```
-from applications/common/utils/http import success_api,fail_api,table_api
-
-# 这是源代码
-def success_api(msg: str = "成功"):
-    """ 成功响应 默认值”成功“ """
-    return jsonify(success=True, msg=msg)
+![源码仓库](assets/源码仓库.jpg)
 
 
-def fail_api(msg: str = "失败"):
-    """ 失败响应 默认值“失败” """
-    return jsonify(success=False, msg=msg)
+如果您完成了这一步，请参阅[下载安装](install.md)章节。
 
-
-def table_api(msg: str = "", count=0, data=None, limit=10):
-    """ 动态表格渲染响应 """
-        res = {
-            'msg': msg,
-            'code': 0,
-            'data': data,
-            'count': count,
-            'limit': limit
-
-        }
-        return jsonify(res)
-```
