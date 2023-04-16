@@ -80,8 +80,8 @@ class BaseConfig:
         'max_instances': 3
     }
 
-    # 插件配置
-    PLUGIN_ENABLE_FOLDERS = ["helloworld"]
+    # 插件配置，填写插件的文件名名称，默认不启用插件。
+    PLUGIN_ENABLE_FOLDERS = []
 
     # 配置多个数据库连接的连接串写法示例
     # HOSTNAME: 指数据库的IP地址、USERNAME：指数据库登录的用户名、PASSWORD：指数据库登录密码、PORT：指数据库开放的端口、DATABASE：指需要连接的数据库名称

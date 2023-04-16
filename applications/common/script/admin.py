@@ -602,58 +602,6 @@ powerdata = [
         create_time=now_time,
         enable=1,
 
-    ), Power(
-        id=60,
-        name='拓展插件',
-        type='0',
-        code='',
-        url='',
-        open_type='',
-        parent_id='0',
-        icon='layui-icon layui-icon-senior',
-        sort=2,
-        create_time=now_time,
-        enable=1,
-
-    ), Power(
-        id=61,
-        name='插件管理',
-        type='1',
-        code='admin:plugin:main',
-        url='/plugin',
-        open_type='_iframe',
-        parent_id='60',
-        icon='layui-icon layui-icon',
-        sort=2,
-        create_time=now_time,
-        enable=1,
-
-    ), Power(
-        id=62,
-        name='启禁插件',
-        type='2',
-        code='admin:plugin:enable',
-        url='',
-        open_type='',
-        parent_id='61',
-        icon='layui-icon layui-icon',
-        sort=1,
-        create_time=now_time,
-        enable=1,
-
-    ), Power(
-        id=63,
-        name='删除插件',
-        type='2',
-        code='admin:plugin:remove',
-        url='',
-        open_type='',
-        parent_id='61',
-        icon='layui-icon layui-icon',
-        sort=2,
-        create_time=now_time,
-        enable=1,
-
     )
 
 ]
