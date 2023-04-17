@@ -7,14 +7,17 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./dockerdata/mysql/log:/usr/local/mysql/log"
       - "./dockerdata/mysql/data:/var/lib/mysql"
-      - "./dockerdata/mysql/my.cnf:/etc/my.cnf"
       - "./dockerdata/mysql/initdb:/docker-entrypoint-initdb.d"
     environment:
       LANG: C.UTF-8
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: 123456
+
+    command: [ 
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      ]
     networks:
       flask-network:
         ipv4_address: 172.10.1.31

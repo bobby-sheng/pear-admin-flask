@@ -155,11 +155,14 @@ flask new --type view --name test/a
 
 #### 使用docker-compose运行项目
 ```bash
+git clone https://gitee.com/pear-admin/pear-admin-flask
+
 #安装docker-compose 
 curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose 
 
+chmod -R 777 dockerdata/mysql/
 docker-compose --version
 docker-compose up -d # -d后台运行
 docker-compose stop # 停止启动
@@ -167,7 +170,7 @@ docker-compose down # 清除容器
 
 dockerdata/config.py # 配置文件
 dockerdata/mysql/initdb/ # MySQL初始化数据在 
-rm -rf dockerdata/mysql/{log,data}/* # down掉容器后启动需要清除删除log,dat
+rm -rf dockerdata/mysql/data/* # down掉容器后启动需要清除删除data
 ```
 
 Pear Admin Flask 还有以下几个版本：					
