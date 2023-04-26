@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy, BaseQuery
@@ -91,3 +92,9 @@ ma = Marshmallow()
 def init_databases(app: Flask):
     db.init_app(app)
     ma.init_app(app)
+    if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+        with app.app_context():
+            try:
+                db.engine.connect()
+            except Exception as e:
+                exit(f"数据库成功失败: {e}")

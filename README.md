@@ -6,10 +6,9 @@
   </h1>
   <h4 align="center">
     开 箱 即 用 的 Flask 快 速 开 发 平 台
-  </h4> 
+  </h4>
 
-  [预览](http://flask.pearadmin.com:8000)   |   [官网](http://www.pearadmin.com/)   |   [群聊](docs/group.md)   |   [文档](docs/detail.md)
-
+  [预览](http://flask.pearadmin.com:8000)   |   [官网](http://www.pearadmin.com/)   |   [群聊](docs/assets/qqgroup.jpg)   |   [文档](docs/detail.md)
 
 <p align="center">
     <a href="#">
@@ -29,11 +28,12 @@
 </div>
 
 #### 项目简介
+
 Pear Admin Flask 基于 Flask 的后台管理系统，拥抱应用广泛的python语言，通过使用本系统，即可快速构建你的功能业务
 项目旨在为 python 开发者提供一个后台管理系统的模板，可以快速构建信息管理系统。
 项目使用flask-sqlalchemy + 权限验证 + Flask-APScheduler 定时任务 + marshmallow 序列化与数据验证
 
-####  内置功能
+#### 内置功能
 
 - [x] 用户管理：用户是系统操作者，该功能主要完成系统用户配置。
 - [x] 权限管理：配置系统菜单，操作权限，按钮权限标识等。
@@ -44,9 +44,10 @@ Pear Admin Flask 基于 Flask 的后台管理系统，拥抱应用广泛的pytho
 - [x] 文件上传:   图片上传示例
 - [x] 定时任务:   简单的定时任务
 
-####  项目结构
+#### 项目结构
 
 ## 应用结构
+
 ```应用结构
 Pear Admin Flask
 ├─applications  # 应用
@@ -67,6 +68,7 @@ Pear Admin Flask
 ```
 
 ## 资源结构
+
 ```资源结构
 Pear Admin Flask
 ├─static    # 项目设定的 Flask 资源文件夹
@@ -98,7 +100,6 @@ git clone https://gitee.com/pear-admin/pear-admin-flask
 
 # 安 装
 pip install -r requirements.txt
-
 ```
 
 #### 修改配置
@@ -154,6 +155,7 @@ flask new --type view --name test/a
 ```
 
 #### 使用docker-compose运行项目
+
 ```bash
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
@@ -173,7 +175,7 @@ dockerdata/mysql/initdb/ # MySQL初始化数据在
 rm -rf dockerdata/mysql/data/* # down掉容器后启动需要清除删除data
 ```
 
-Pear Admin Flask 还有以下几个版本：					
+Pear Admin Flask 还有以下几个版本：                    
 
 **[mini 分支版本](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)**
 
@@ -190,8 +192,8 @@ main 分支是对 mini 分支的后续，目前还在开发中。
 
 #### 预览项目
 
-|  |  |
-|---------------------|---------------------|
-| ![](docs/assets/1.jpg)  | ![](docs/assets/2.jpg)  |
-| ![](docs/assets/3.jpg)|  ![](docs/assets/4.jpg)   |
-| ![](docs/assets/5.jpg) |  ![](docs/assets/6.jpg)   |
+|                        |                        |
+| ---------------------- | ---------------------- |
+| ![](docs/assets/1.jpg) | ![](docs/assets/2.jpg) |
+| ![](docs/assets/3.jpg) | ![](docs/assets/4.jpg) |
+| ![](docs/assets/5.jpg) | ![](docs/assets/6.jpg) |
