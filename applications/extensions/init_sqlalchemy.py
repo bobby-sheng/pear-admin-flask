@@ -97,4 +97,4 @@ def init_databases(app: Flask):
             try:
                 db.engine.connect()
             except Exception as e:
-                exit(f"数据库成功失败: {e}")
+                exit(f"数据库连接失败: {e}")
