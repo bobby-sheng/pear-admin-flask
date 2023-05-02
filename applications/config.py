@@ -70,7 +70,7 @@ class BaseConfig:
     SCHEDULER_API_ENABLED = False
     SCHEDULER_JOBSTORES: dict = {
         'default': SQLAlchemyJobStore(
-            url=f'mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}')
+            url=f'mysql+pymysql://{MYSQL_USERNAME}:{urlquote(MYSQL_PASSWORD)}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}')
     }
     SCHEDULER_EXECUTORS: dict = {
         'default': ThreadPoolExecutor(20)
