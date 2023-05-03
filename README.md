@@ -173,6 +173,7 @@ docker-compose down # 清除容器
 dockerdata/config.py # 配置文件
 dockerdata/mysql/initdb/ # MySQL初始化数据在 
 rm -rf dockerdata/mysql/data/* # down掉容器后启动需要清除删除data
+dockerdata/restart_mysql_data.sh #重置dokcer数据库
 ```
 
 Pear Admin Flask 还有以下几个版本：                    
