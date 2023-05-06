@@ -164,19 +164,26 @@ curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compos
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose 
 
-chmod -R 777 dockerdata/mysql/
-docker-compose --version
-docker-compose up -d # -d后台运行
-docker-compose stop # 停止启动
-docker-compose down # 清除容器
+#运行如下命令，有输入版本，表示docker-compose 可以用了
+docker-compose --version 
 
-dockerdata/config.py # 配置文件
-dockerdata/mysql/initdb/ # MySQL初始化数据在 
-rm -rf dockerdata/mysql/data/* # down掉容器后启动需要清除删除data
-dockerdata/restart_mysql_data.sh #重置dokcer数据库
+#在当前目录执行如下命令即可以运行app
+docker-compose -f dockercompose.yaml up
+
+#看到如下表示运行成功，由于pip下载慢，需要一些时间，请耐心等待；如果安装失败，重新执行上面的命令即可。
+
+#运行后在浏览器访问127.0.0.1：5000 
+
+#如果要停止容器运行，在当前文件夹执行如下命令：
+docker-compose -f dockercompose.yaml dwon
+
+
 ```
 
-Pear Admin Flask 还有以下几个版本：                    
+#### Pear Admin Flask 还有以下几个版本：
+
+```
+                    
 
 **[mini 分支版本](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)**
 
@@ -198,3 +205,5 @@ main 分支是对 mini 分支的后续，目前还在开发中。
 | ![](docs/assets/1.jpg) | ![](docs/assets/2.jpg) |
 | ![](docs/assets/3.jpg) | ![](docs/assets/4.jpg) |
 | ![](docs/assets/5.jpg) | ![](docs/assets/6.jpg) |
+```
+
