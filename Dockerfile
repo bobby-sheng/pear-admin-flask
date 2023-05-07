@@ -5,10 +5,10 @@ COPY dockerdata/gunicorn.conf.py /app/
 WORKDIR /app/
 
 ENV TIME_ZONE Asia/Shanghai
+ENV PIPURL "https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.douban.com"
 
 RUN echo "${TIME_ZONE}" > /etc/timezone \
     && ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
-ENV PIPURL "https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.douban.com"
 RUN apk update && apk add mysql-client
 RUN chmod +x start.sh 
 RUN sed -i  's/MYSQL_HOST = "127.0.0.1"/MYSQL_HOST = "mysql"/'  applications/config.py
