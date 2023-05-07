@@ -197,7 +197,7 @@ flask 2.0.1 + flask-sqlalchemy + 权限验证 + flask-restful
 **[main 分支版本](https://gitee.com/pear-admin/pear-admin-flask/tree/main/)**
 
 main 分支是对 mini 分支的后续，目前还在开发中。
-
+```
 #### 预览项目
 
 |                        |                        |
@@ -205,5 +205,5 @@ main 分支是对 mini 分支的后续，目前还在开发中。
 | ![](docs/assets/1.jpg) | ![](docs/assets/2.jpg) |
 | ![](docs/assets/3.jpg) | ![](docs/assets/4.jpg) |
 | ![](docs/assets/5.jpg) | ![](docs/assets/6.jpg) |
-```
+
 
