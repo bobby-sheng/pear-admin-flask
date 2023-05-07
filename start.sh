@@ -20,7 +20,6 @@ flask db migrate
 flask db upgrade
 flask admin init
 
-# Start Flask application
-echo "Starting Flask application..."
-python3 app.py
-
+# Start gunicorn application
+echo "Starting gunicorn application..."
+exec gunicorn -c gunicorn.conf.py "applications:create_app()"
