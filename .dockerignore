@@ -5,3 +5,4 @@ Dockerfile.server
 README.md
 !dockerdata/config.py
 !dockerdata/start.sh
+!dockerdata/gunicorn.conf.py
