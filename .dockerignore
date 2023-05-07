@@ -3,6 +3,5 @@ dockerdata
 docker-compose.yml
 Dockerfile.server
 README.md
-requirements.txt
 !dockerdata/config.py
 !dockerdata/start.sh
