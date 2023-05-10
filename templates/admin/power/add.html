@@ -145,17 +145,15 @@
             return false
         })
 
+        
         icon.render({
             elem: '#icon',
-            style: 'color: #5FB878;',
-            placeholder: '',
-            isSplit: true,
-            page: false,
-            search: false,
+            type: 'fontClass',
+            search: true,
             click: function (data) {
-                console.log(data)
+                console.log(data);
             }
-        })
+        });
     })
 </script>
 <script>
