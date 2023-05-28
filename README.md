@@ -139,9 +139,15 @@ flask db init
 flask db migrate
 flask db upgrade
 flask admin init
+
+# windoes
+run.bat
+
+# linux
+chmod +x run.sh
+./run.sh
 ```
 
-执行 python app.py 命令启动项目
 
 #### 命令行创建视图
 

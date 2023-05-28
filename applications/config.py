@@ -6,10 +6,6 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
 
 class BaseConfig:
-    DEBUG = True
-    HOST = '127.0.0.1'
-    PORT = 5000
-
     SUPERADMIN = 'admin'
 
     SYSTEM_NAME = 'Pear Admin'
