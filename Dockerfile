@@ -1,6 +1,7 @@
 FROM pearadminflask/python3.7-flask:pillow
 
 COPY . /app/
+COPY dockerdata/start.sh /app/
 COPY dockerdata/gunicorn.conf.py /app/
 WORKDIR /app/
 
