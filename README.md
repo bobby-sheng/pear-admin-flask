@@ -112,10 +112,6 @@ MYSQL_DATABASE=PearAdminFlask
 MYSQL_USERNAME=root
 MYSQL_PASSWORD=root
 
-# Redis 配置
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
-
 # 密钥配置
 SECRET_KEY='pear-admin-flask'
 
@@ -140,7 +136,7 @@ flask db migrate
 flask db upgrade
 flask admin init
 
-# windoes
+# windows
 run.bat
 
 # linux
@@ -149,16 +145,7 @@ chmod +x run.sh
 ```
 
 
-#### 命令行创建视图
 
-```bash
-# 示例
-
-flask new --type view --name test/a
-
-# 自动注册蓝图
-# 访问http://127.0.0.1:5000/test/a/
-```
 
 #### 使用docker-compose运行项目
 
