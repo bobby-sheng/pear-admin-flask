@@ -10,7 +10,7 @@ class BaseConfig:
     HOST = '127.0.0.1'
     PORT = 5000
 
-    SUPERADMIN = 'admin'
+    SUPERADMIN = 'system'
 
     SYSTEM_NAME = 'Pear Admin'
     # 主题面板的链接列表配置
@@ -39,7 +39,7 @@ class BaseConfig:
     # JSON配置
     JSON_AS_ASCII = False
 
-    SECRET_KEY = "pear-admin-flask"
+    SECRET_KEY = "pear-system-flask"
 
     # redis配置
     REDIS_HOST = "127.0.0.1"

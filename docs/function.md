@@ -29,7 +29,7 @@ def authorize(power: str, log: bool = False):
 from applications.common.utils.rights import authorize
 
 @app.route("/test")
-@authorize("admin:power:remove", log=True)
+@authorize("system:power:remove", log=True)
 def test_index():
     return 'You are allowed.'
 ```
@@ -47,12 +47,12 @@ def test_index():
 例如
 
 ```python
-	{% if authorize("admin:user:edit") %}
+	{% if authorize("system:user:edit") %}
         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
     	<i class="pear-icon pear-icon-edit"></i>
         </button>
     {% endif %}
-    {% if authorize("admin:user:remove") %}
+    {% if authorize("system:user:remove") %}
         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
         <i class="pear-icon pear-icon-ashbin"></i>
         </button>
@@ -255,7 +255,7 @@ def table_api(msg: str = "", count=0, data=None, limit=10):
 from applications.common.utils.http import success_api, fail_api, table_api
 
 @admin_log.get('/operateLog')
-@authorize("admin:log:main")
+@authorize("system:log:main")
 def operate_log():
     # orm查询
     # 使用分页获取data需要.items
@@ -270,7 +270,7 @@ def operate_log():
 from applications.common.utils.http import success_api, fail_api, table_api
 
 @admin_power.post('/save')
-@authorize("admin:power:add", log=True)
+@authorize("system:power:add", log=True)
 def save():
     ...  # 若干操作
     if success:

@@ -1,5 +1,5 @@
 import logging
-from urllib.parse import quote_plus as urlquote
+# from urllib.parse import quote_plus as urlquote
 
 
 class BaseConfig:
@@ -32,17 +32,18 @@ class BaseConfig:
     # JSON配置
     JSON_AS_ASCII = False
 
-    SECRET_KEY = "pear-admin-flask"
+    SECRET_KEY = "pear-system-flask"
 
     # mysql 配置
-    MYSQL_USERNAME = "root"
-    MYSQL_PASSWORD = "123456"
-    MYSQL_HOST = "127.0.0.1"
-    MYSQL_PORT = 3306
-    MYSQL_DATABASE = "PearAdminFlask"
+    # MYSQL_USERNAME = "root"
+    # MYSQL_PASSWORD = "123456"
+    # MYSQL_HOST = "127.0.0.1"
+    # MYSQL_PORT = 3306
+    # MYSQL_DATABASE = "PearAdminFlask"
 
-    # mysql 数据库的配置信息
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USERNAME}:{urlquote(MYSQL_PASSWORD)}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}?charset=utf8mb4"
+    # 数据库的配置信息
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///../pear.db'
+    # SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USERNAME}:{urlquote(MYSQL_PASSWORD)}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}?charset=utf8mb4"
 
     # 默认日志等级
     LOG_LEVEL = logging.WARN
@@ -61,7 +62,7 @@ class BaseConfig:
     # 配置多个数据库连接的连接串写法示例
     # HOSTNAME: 指数据库的IP地址、USERNAME：指数据库登录的用户名、PASSWORD：指数据库登录密码、PORT：指数据库开放的端口、DATABASE：指需要连接的数据库名称
     # MSSQL:    f"mssql+pymssql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=cp936"
-    # MySQL:    f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
+    # MySQL:    f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8mb4"
     # Oracle:   f"oracle+cx_oracle://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}"
     # SQLite    "sqlite:/// database.db"
     # Postgres f"postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}"

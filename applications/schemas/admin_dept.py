@@ -1,25 +1,12 @@
-from applications.extensions import ma
-from marshmallow import fields, validate
+from flask_marshmallow.sqla import SQLAlchemyAutoSchema
+
+from applications.models import Dept
 
 
-class DeptInSchema(ma.Schema):
-    parentId = fields.Integer(required=True)
-    deptName = fields.Str(required=True)
-    leader = fields.Str(required=True)
-    phone = fields.Str(required=True)
-    email = fields.Str(validate=validate.Email())
-    address = fields.Str()
-    status = fields.Str(validate=validate.OneOf(["0", "1"]))
-    sort = fields.Integer()
-
-
-class DeptOutSchema(ma.Schema):
-    deptId = fields.Integer(attribute="id")
-    parentId = fields.Integer(attribute="parent_id")
-    deptName = fields.Str(attribute="dept_name")
-    leader = fields.Str()
-    phone = fields.Str()
-    email = fields.Str(validate=validate.Email())
-    address = fields.Str()
-    status = fields.Str(validate=validate.OneOf(["0", "1"]))
-    sort = fields.Integer()
+class DeptSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Dept  # table = models.Album.__table__
+        # include_relationships = True  # 输出模型对象时同时对外键，是否也一并进行处理
+        include_fk = True  # 序列化阶段是否也一并返回主键
+        # fields= ["id","name"] # 启动的字段列表
+        # exclude = ["id","name"] # 排除字段列表

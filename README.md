@@ -113,7 +113,7 @@ MYSQL_USERNAME=root
 MYSQL_PASSWORD=root
 
 # 密钥配置
-SECRET_KEY='pear-admin-flask'
+SECRET_KEY='pear-system-flask'
 
 # 邮箱配置
 MAIL_SERVER='smtp.qq.com'
@@ -134,7 +134,7 @@ python -m venv venv
 flask db init
 flask db migrate
 flask db upgrade
-flask admin init
+flask system init
 
 # windows
 run.bat

@@ -27,7 +27,7 @@ layui.define(['layer', 'element'], function (exports) {
                 param.area = (param.type == 2) ? ['360px', '300px'] : '360px';
             }
             if (!param.skin) {
-                param.skin = 'layui-layer-admin';
+                param.skin = 'layui-layer-system';
             }
             if (param.fixed == undefined) {
                 param.fixed = false;
@@ -204,7 +204,7 @@ layui.define(['layer', 'element'], function (exports) {
             var url = $(this).data('url');
             layer.confirm('确定要退出登录吗？', {
                 title: '温馨提示',
-                skin: 'layui-layer-admin',
+                skin: 'layui-layer-system',
                 shade: .1
             }, function () {
                 location.replace(url ? url : '/');

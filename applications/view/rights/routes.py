@@ -17,7 +17,7 @@ def configs():
         # 网站名称
         "title": current_app.config.get("SYSTEM_NAME"),
         # 网站图标
-        "image": "/static/admin/admin/images/logo.png"
+        "image": "/static/system/system/images/logo.png"
         # 菜单配置
     }, menu={
         # 菜单数据来源
@@ -47,7 +47,7 @@ def configs():
             # 标识 ID , 建议与菜单项中的 ID 一致
             "id": "10",
             # 页面地址
-            "href": "/admin/welcome",
+            "href": "/system/welcome",
             # 标题
             "title": "首页"
         }

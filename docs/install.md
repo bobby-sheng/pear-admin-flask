@@ -70,7 +70,7 @@ python -m pip install -r requirement.txt
 flask db init
 flask db migrate
 flask db upgrade
-flask admin init
+flask system init
 ```
 
 #### 运行项目

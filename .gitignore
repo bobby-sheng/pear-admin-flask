@@ -114,7 +114,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#ide
+# idea
 .idea/
+
 # 迁移文件
 migrations/
+
+# sqlite
+*.db
+
+# 文件上传
+static/upload/

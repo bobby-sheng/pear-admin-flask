@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, comment='用户ID')
     username = db.Column(db.String(20), comment='用户名')
     realname = db.Column(db.String(20), comment='真实名字')
-    avatar = db.Column(db.String(255), comment='头像', default="/static/admin/admin/images/avatar.jpg")
+    avatar = db.Column(db.String(255), comment='头像', default="/static/system/admin/images/avatar.jpg")
     remark = db.Column(db.String(255), comment='备注')
     password_hash = db.Column(db.String(128), comment='哈希密码')
     enable = db.Column(db.Integer, default=0, comment='启用')
