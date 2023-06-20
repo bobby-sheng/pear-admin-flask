@@ -70,16 +70,17 @@ python -m pip install -r requirement.txt
 flask db init
 flask db migrate
 flask db upgrade
-flask system init
+flask admin init
 ```
 
 #### 运行项目
 
 ```shell
-python app.py
+# linux
+run.bat
 
-# 或者可以使用
-flask run
+# windows
+./run.sh
 ```
 
 #### 使用docker-compose运行项目
