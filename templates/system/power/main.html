@@ -209,7 +209,7 @@
         title: '修改',
         shade: 0.1,
         area: ['450px', '500px'],
-        content: MODULE_PATH + 'edit/' + obj.data['powerId']
+        content: MODULE_PATH + 'edit/' + obj.data['id']
       })
     }
     window.remove = function (obj) {
@@ -217,7 +217,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'remove/' + obj.data['powerId'],
+          url: MODULE_PATH + 'remove/' + obj.data['id'],
           dataType: 'json',
           type: 'delete',
           success: function (result) {
