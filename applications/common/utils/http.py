@@ -1,9 +1,9 @@
 from flask import jsonify
 
 
-def success_api(msg: str = "成功"):
+def success_api(msg: str = "成功", data=None):
     """ 成功响应 默认值“成功” """
-    return jsonify(success=True, msg=msg)
+    return jsonify(success=True, msg=msg, data=data)
 
 
 def fail_api(msg: str = "失败"):

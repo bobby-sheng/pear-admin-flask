@@ -47,8 +47,8 @@ class vieCode:
         # 是否自定义字符集合
         if not self.__str:
             # 源文本
-            number = "3456789"
-            srcLetter = "qwertyuipasdfghjkzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+            number = "6666"
+            srcLetter = "6666"
             srcUpper = srcLetter.upper()
             if self.__type == 1:
                 self.__str = number

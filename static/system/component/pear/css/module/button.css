@@ -30,6 +30,7 @@
 .pear-btn-danger,
 .pear-btn-warming,
 .pear-btn-success,
+.pear-btn-blue,
 .pear-btn-primary {
 	height: 37px;
 	line-height: 37px;
@@ -38,6 +39,10 @@
 
 /** Button 主题 */
 .pear-btn-primary {
+	border: 1px solid #2D8CF0;
+	background-color: #2D8CF0 !important;
+}
+.pear-btn-blue {
 	border: 1px solid #2D8CF0;
 	background-color: #2D8CF0 !important;
 }

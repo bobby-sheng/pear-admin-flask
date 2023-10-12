@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>其他工具</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.6/css/layui.css">
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-col-xs12">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>远程执行设备命令</legend>
+            </fieldset>
+            <div class="layui-upload">
+                <div class="layui-row">
+                    <label class="layui-form-label">选择文件：</label>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" id="test3"><i class="layui-icon"></i>上传文件</button>
+                        <input type="file" name="file" id="fileInput" style="display: none;">
+                    </div>
+                </div>
+                <div class="layui-row layui-mt-20">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">设备返回：</label>
+                        <div class="layui-input-block">
+                            <textarea name="result" id="resultTextarea" class="layui-textarea" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-mt-20">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-normal" id="submitBtn">执行</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
+<script>
+
+</script>
+<script>
+    // layui.use('layedit', function () {
+    //     var layedit = layui.layedit;
+    //     layedit.build('resultTextarea'); //建立编辑器
+    // });
+    layui.use(['upload', 'jquery','layedit'], function () {
+        var layedit = layui.layedit;
+        var upload = layui.upload;
+        var $ = layui.jquery;
+        let MODULE_PATH = "{{ url_for('system.units.main') }}"
+        // 文件上传按钮点击事件
+        layedit.build('resultTextarea');
+        $('#test3').click(function () {
+            $('#fileInput').click();
+        });
+
+        // 文件选择事件
+        //指定允许上传的文件类型
+        upload.render({
+            elem: '#fileInput'
+            , url: MODULE_PATH + '/upload' //此处配置你自己的上传接口即可
+            , accept: 'file' //普通文件
+            , done: function (res) {
+                layer.msg(res.msg);
+                console.log(res);
+            }
+        });
+
+        // 提交按钮点击事件
+        $('#submitBtn').click(function () {
+            // 发起上传
+            $.ajax({
+                url: MODULE_PATH + '/upload/exec',
+                type: 'POST',
+                dataType: 'json',
+                success: function (res) {
+                    // 处理上传成功后的回调
+                    layedit.setContent(index_aaa, res.msg);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

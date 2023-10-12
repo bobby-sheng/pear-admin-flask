@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>全部新建jira工单</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='system/admin/css/other/preview_add.css') }}"/>
+
+    <style>
+        /* 定义页面样式 */
+        body {
+
+            background: #00d2ff;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+            padding-top: 2em;
+        }
+
+        /* 定义按钮样式 */
+        .my-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px;
+            border-radius: 200px;
+            color: #fff;
+            background-color: #663399;
+            border: none;
+            outline: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            transform-origin: center;
+            box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 鼠标悬停效果 */
+        .my-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 1px 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 日志框样式 */
+        #log-container {
+            width: 100%;
+            height: 200px;
+            overflow: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        /* 定义标题样式 */
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        /* 定义描述文字样式 */
+        p {
+            font-size: 1.2em;
+            font-weight: 600;
+            line-height: 1.8em;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        #logArea {
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            width: 80%;
+            margin: 60px auto;
+            text-align: center;
+            background: #fff;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .my-btn {
+                display: block;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>点击按钮执行新建jira工单</h1>
+
+<form id="my-form">
+        <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="my-btn" lay-submit="" lay-filter="user-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                开始执行
+            </button>
+        </div>
+    </div>
+</form>
+
+<span id="my-description">(点击按钮执行新建jira工单)</span>
+
+<!--<div id="log-area"></div>-->
+<div id="logArea"></div>
+<!--<textarea id="log-area" rows="20" ></textarea>-->
+<script>
+       // 获取DOM元素和初始化
+    const form = document.getElementById('my-form');
+    const button = document.getElementsByClassName('my-btn');
+    const description = document.getElementById('my-description');
+    // const logArea = document.getElementById('log-area');
+
+
+    // 处理form提交事件，发送生成log请求
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // 显示"正在生成日志"文本，并禁用按钮
+        description.textContent = '正在执行创建jira工单...';
+        button.disabled = true;
+
+        fetch('/system/jira/creat', {method: 'POST'})
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络错误');
+                }
+                return response.text();
+            })
+            .then(data => {
+                // console.log(data); // 将数据打印到控制台
+
+                document.getElementById('logArea').textContent = data;
+                // 解锁按钮
+                description.textContent = '执行完成，再次点击按钮可重新执行';
+                button.disabled = false;
+            })
+            .catch(error => {
+                console.log(error);
+                alert('发生了问题，请重试。');
+            });
+    });
+</script>
+</body>
+</html>

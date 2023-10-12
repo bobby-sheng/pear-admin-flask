@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>客户使用环境版本管理</title>
+    {% include 'system/common/header.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='system/admin/css/other/preview_add.css') }}"/>
+</head>
+{% include 'system/common/footer.html' %}
+
+<body>
+    <div class="layui-container">
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col width="200">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>客户名称</th>
+                    <th>更新内容</th>
+                    <th>更新时间</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for version in versions %}
+                <tr>
+                    <td>{{ version.customer }}</td>
+                    <td>{{ version.version }}</td>
+                    <td>{{ version.time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 引入 Layui JS 文件 -->
+</body>
+</html>

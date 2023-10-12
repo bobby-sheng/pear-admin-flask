@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>用户编辑</title>
+    {% include 'system/common/header.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='system/admin/css/other/preview_add.css') }}"/>
+
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.id }}" name="previewId" lay-verify="title"
+                               autocomplete="off" placeholder="请输入编号" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客户</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.name }}" name="name" lay-verify="title"
+                               autocomplete="off" placeholder="请输入客户名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">CMDBTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.CMDBTAG }}" name="CMDBTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">EVENTTITAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.EVENTTITAG }}" name="EVENTTITAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">GWAYTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.GWAYTAG }}" name="GWAYTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">HTTPDTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.HTTPDTAG }}" name="HTTPDTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">INET_CLIENTTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.INET_CLIENTTAG }}" name="INET_CLIENTTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">INET_CLIENT_JAVATAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.INET_CLIENT_JAVATAG }}" name="INET_CLIENT_JAVATAG"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">INET_NGPARSERTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.INET_NGPARSERTAG }}" name="INET_NGPARSERTAG"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">INET_PLATFORMTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.INET_PLATFORMTAG }}" name="INET_PLATFORMTAG"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">INET_WORKFLOWTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.INET_WORKFLOWTAG }}" name="INET_WORKFLOWTAG"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">JSON_ADAPTORTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.JSON_ADAPTORTAG }}" name="JSON_ADAPTORTAG"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">LOGSYSTEMTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.LOGSYSTEMTAG }}" name="LOGSYSTEMTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入LOGSYSTEMTAG"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">NETCTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.NETCTAG }}" name="NETCTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">NETDTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.NETDTAG }}" name="NETDTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">NGINXTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.NGINXTAG }}" name="NGINXTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">PIPELINETAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.PIPELINETAG }}" name="PIPELINETAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">TRIGGERTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.TRIGGERTAG }}" name="TRIGGERTAG" lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">POLICYINSIGHTTAG</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ preview.POLICYINSIGHTTAG }}" name="POLICYINSIGHTTAG"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入镜像版本"
+                               class="layui-input">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                    lay-filter="user-update">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                    lay-filter="user-update">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+{% include 'system/common/footer.html' %}
+<script>
+    layui.use(['form', 'jquery', 'dtree'], function () {
+        let form = layui.form
+        let $ = layui.jquery
+        let dtree = layui.dtree
+
+        form.on('submit(user-update)', function (data) {
+            $.ajax({
+                url: '/system/preview/update',
+                data: JSON.stringify(data.field),
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'put',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 420}, function () {
+
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                            parent.layui.table.reload('user-table')
+                        })
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000})
+                    }
+                }
+            })
+            return false
+        })
+    })
+</script>
+</body>
+</html>

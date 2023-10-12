@@ -1,21 +1,23 @@
 import logging
+
+
 # from urllib.parse import quote_plus as urlquote
 
 
 class BaseConfig:
     SUPERADMIN = 'admin'
 
-    SYSTEM_NAME = 'Pear Admin'
+    SYSTEM_NAME = '工具平台'
     # 主题面板的链接列表配置
     SYSTEM_PANEL_LINKS = [
         {
             "icon": "layui-icon layui-icon-auz",
-            "title": "官方网站",
+            "title": "jenkins平台",
             "href": "http://www.pearadmin.com"
         },
         {
             "icon": "layui-icon layui-icon-auz",
-            "title": "开发文档",
+            "title": "接口自动化开发文档",
             "href": "http://www.pearadmin.com"
         },
         {
@@ -78,3 +80,7 @@ class BaseConfig:
     #    'testOracle': 'oracle+cx_oracle://test:123456@192.168.1.1:1521/test',
     #    'testSQLite': 'sqlite:///database.db
     # }
+    JENKINS_URL = "http://jenkins.sky-cloud.net/view/%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E6%B5%81%E6%B0%B4%E7%BA%BF/job/Auto_Deploy_All_iNET/build"
+    JENKINS_NAME = "shenbo.zhang"
+    JENKINS_TOKEN = "11dc01225286a6943df0ec8adfbcf3006b"
+    JENKINS_PASSWORD = "zhangshenbo#2023"

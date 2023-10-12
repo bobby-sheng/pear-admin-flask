@@ -12,6 +12,11 @@ from applications.view.system.rights import bp as right_bp
 from applications.view.system.role import bp as role_bp
 from applications.view.system.user import bp as user_bp
 from applications.view.system.dept import bp as dept_bp
+from applications.view.system.preview import bp as preview_bp
+from applications.view.system.history import bp as history
+from applications.view.system.jira import bp as jira
+from applications.view.system.feishu import bp as feishu_bp
+
 
 # 创建sys
 system_bp = Blueprint('system', __name__, url_prefix='/system')
@@ -20,6 +25,10 @@ system_bp = Blueprint('system', __name__, url_prefix='/system')
 def register_system_bps(app: Flask):
     # 在admin_bp下注册子蓝图
     system_bp.register_blueprint(user_bp)
+    system_bp.register_blueprint(preview_bp)
+    system_bp.register_blueprint(history)
+    system_bp.register_blueprint(jira)
+    system_bp.register_blueprint(feishu_bp)
     system_bp.register_blueprint(file_bp)
     system_bp.register_blueprint(monitor_bp)
     system_bp.register_blueprint(log_bp)

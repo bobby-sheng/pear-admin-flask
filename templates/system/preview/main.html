@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>客户环境部署</title>
+    {% include 'system/common/header.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='system/admin/css/other/preview.css') }}"/>
+</head>
+<body class="pear-container">
+{# 查询表单 #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="user-query-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" placeholder="" class="layui-input">
+                </div>
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    查询
+                </button>
+                <button type="reset" class="pear-btn pear-btn-md">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# 用户表格 #}
+<div class="user-main user-collasped">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <table id="user-table" lay-filter="user-table"></table>
+        </div>
+    </div>
+</div>
+</body>
+{# 表格操作 #}
+<script type="text/html" id="user-toolbar">
+    {% if authorize("system:preview:add") %}
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="pear-icon pear-icon-add"></i>
+        新增
+    </button>
+    {% endif %}
+    {% if authorize("system:preview:deploy_log") %}
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="deploy_log">
+        部署日志
+    </button>
+    {% endif %}
+    {% if authorize("system:preview:get_images_from") %}
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="cp_images">
+        解析镜像文本
+    </button>
+    {% endif %}
+</script>
+
+{# 用户修改操作 #}
+<script type="text/html" id="user-bar">
+
+    {% if authorize("system:preview:edit") %}
+    <a class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">更新</a>
+    {% endif %}
+    {% if authorize("system:preview:deploy") %}
+    <a class="pear-btn pear-btn-primary pear-btn-sm" lay-event="more">部署 <i class="layui-icon layui-icon-down"></i></a>
+    {% endif %}
+    {% if authorize("system:preview:edit") %}
+    <a class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">删除</a>
+    {% endif %}
+</script>
+
+{% raw %}
+<script type="text/html" id="user-createTime">
+    {{layui.util.toDateString(d.create_at,  "yyyy-MM-dd HH:mm:ss")}}
+</script>
+<script type="text/html" id="user-updateTime">
+    {{layui.util.toDateString(d.create_at,  "yyyy-MM-dd HH:mm:ss")}}
+</script>
+{% endraw %}
+
+{% include 'system/common/footer.html' %}
+<script>
+    function convertToDictionary(value) {
+        const dict = {};
+        const pairs = value.split(' ');
+        for (let i = 0; i < pairs.length; i++) {
+            const [key, val] = pairs[i].split(':');
+            dict[key.replaceAll("-", "_")] = val;
+        }
+        return dict;
+    }
+
+    layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let dtree = layui.dtree
+        let popup = layui.popup
+        let common = layui.common
+        let dropdown = layui.dropdown
+        let MODULE_PATH = "{{ url_for('system.preview.main') }}"
+        // 表格数据
+        let cols = [
+            [
+                {title: 'id', field: 'id', align: 'center'},
+                {title: '客户', field: 'name', align: 'center', width: 110},
+                {title: 'CMDBTAG', field: 'CMDBTAG', align: 'center'},
+                {title: 'EVENTTITAG', field: 'EVENTTITAG', align: 'center', width: 150},
+                {title: 'GWAYTAG', field: 'GWAYTAG', align: 'center'},
+                {title: 'HTTPDTAG', field: 'HTTPDTAG', align: 'center'},
+                {title: 'INET_CLIENTTAG', field: 'INET_CLIENTTAG', align: 'center', width: 150},
+                {title: 'INET_CLIENT_JAVATAG', field: 'INET_CLIENT_JAVATAG', align: 'center', width: 200},
+                {title: 'INET_NGPARSERTAG', field: 'INET_NGPARSERTAG', align: 'center', width: 170},
+                {title: 'INET_PLATFORMTAG', field: 'INET_PLATFORMTAG', align: 'center', width: 170},
+                {title: 'INET_WORKFLOWTAG', field: 'INET_WORKFLOWTAG', align: 'center', width: 200},
+                {title: 'JSON_ADAPTORTAG', field: 'JSON_ADAPTORTAG', align: 'center', width: 170},
+                {title: 'LOGSYSTEMTAG', field: 'LOGSYSTEMTAG', align: 'center', width: 170},
+                {title: 'NETCTAG', field: 'NETCTAG', align: 'center'},
+                {title: 'NGINXTAG', field: 'NGINXTAG', align: 'center'},
+                {title: 'PIPELINETAG', field: 'PIPELINETAG', align: 'center', width: 170},
+                {title: 'TRIGGERTAG', field: 'TRIGGERTAG', align: 'center', width: 150},
+                {title: 'POLICYINSIGHTTAG', field: 'POLICYINSIGHTTAG', align: 'center', width: 170},
+
+                {title: '创建时间', field: 'create_at', templet: '#user-createTime', align: 'center', width: 170},
+                {title: '更新时间', field: 'update_at', templet: '#user-updateTime', align: 'center', width: 170},
+                {
+                    title: '操作',
+                    fixed: 'right',
+                    toolbar: '#user-bar',
+                    // align: 'center',
+                    width: 200,
+                    style: 'overflow:inherit;text-overflow: inherit;'
+                }
+            ]
+        ]
+
+        // 渲染表格数据
+        table.render({
+            elem: '#user-table',
+            url: MODULE_PATH + 'data',
+            page: true,
+            cols: cols,
+            skin: 'line',
+            cellMinWidth: 110,
+            height: 'full-148',
+            toolbar: '#user-toolbar', /*工具栏*/
+            text: {none: '暂无客户版本信息'},
+            defaultToolbar: [{layEvent: 'refresh', icon: 'layui-icon-refresh'}, 'filter', 'print', 'exports'] /*默认工具栏*/
+        })
+
+
+        table.on('tool(user-table)', function (obj) {
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'more') {
+                dropdown.render({
+                    elem: this //触发事件的 DOM 对象
+                    , show: true //外部事件触发即显示
+                    , data: [{
+                        title: '部署全部'
+                        , id: 'deploy_all'
+                    }, {
+                        title: '部署单个'
+                        , id: 'deploy_one'
+                    }]
+                    , click: function (menudata) {
+                        if (menudata.id === 'deploy_all') {
+                            window.deploy_all(obj)
+                        } else if (menudata.id === 'deploy_one') {
+                            window.deploy_one(obj)
+                        }
+                    }
+                    , align: 'right' //右对齐弹出（v2.6.8 新增）
+                    , style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
+                })
+            }
+            if (obj.event === 'edit') {
+                window.edit(obj)
+            } else if (obj.event === 'remove') {
+                window.remove(obj)
+            }
+        })
+        table.on('toolbar(user-table)', function (obj) {
+            if (obj.event === 'add') {
+                window.add()
+            } else if (obj.event === 'cp_images') {
+                window.cp_images()
+            } else if (obj.event === 'deploy_log') {
+                window.deploy_log()
+            } else if (obj.event === 'refresh') {
+                window.refresh()
+            } else if (obj.event === 'batchRemove') {
+                window.batchRemove(obj)
+            } else if (obj.event === 'collasped') {
+                $('.user-left').toggleClass('user-collasped')
+                $('.user-main').toggleClass('user-collasped')
+                table.resize()
+            }
+        })
+
+        form.on('submit(user-query)', function (data) {
+            window.refresh(data.field)
+            return false
+        })
+
+
+        window.add = function () {
+            layer.open({
+                type: 2,
+                title: '新增',
+                shade: 0.1,
+                area: ['550px', '550px'],
+                content: MODULE_PATH + 'add'
+            })
+        }
+        window.deploy_log = function () {
+            layer.open({
+                type: 2,
+                title: '部署日志',
+                shade: 0.1,
+                area: ['1200px', '550px'],
+                content: MODULE_PATH + 'deploy_log'
+            })
+        }
+        window.cp_images = function () {
+
+            layer.prompt({
+                title: '粘贴linux复制的镜像信息',
+                area: ['550px', '550px'],
+                shade: 0.1,
+            }, function (value) {
+                layer.close(layer.index);
+                const dict_data = convertToDictionary(value);
+                layer.open({
+                    type: 2,
+                    title: '粘贴linux复制的镜像信息',
+                    shade: 0.1,
+                    area: ['550px', '550px'],
+                    content: MODULE_PATH + 'get_images_from?dict=' + encodeURIComponent(JSON.stringify(dict_data))
+                })
+            });
+        }
+        window.edit = function (obj) {
+            layer.open({
+                type: 2,
+                title: '修改',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: MODULE_PATH + 'edit/' + obj.data['id']
+            })
+        }
+        window.deploy_all = function (obj) {
+            layer.open({
+                type: 2,
+                title: '部署全部',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: MODULE_PATH + 'deploy_all/' + obj.data['id']
+            })
+        }
+        window.deploy_one = function (obj) {
+            layer.open({
+                type: 2,
+                title: '部署单个',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: MODULE_PATH + 'deploy_one/' + obj.data['id']
+            })
+        }
+
+
+        window.remove = function (obj) {
+            layer.confirm('确定要删除该客户组件', {icon: 3, title: '提示'}, function (index) {
+                layer.close(index)
+                let loading = layer.load()
+                $.ajax({
+                    url: MODULE_PATH + 'remove/' + obj.data['id'],
+                    dataType: 'json',
+                    type: 'delete',
+                    success: function (result) {
+                        layer.close(loading)
+                        obj.del()
+                        // if (result.success) {
+                        //     popup.success(result.msg, function () {
+                        //
+                        //     })
+                        // } else {
+                        //     popup.failure(result.msg)
+                        // }
+                    }
+                })
+            })
+        }
+
+
+        window.refresh = function (param) {
+            table.reload('user-table', {where: param})
+        }
+    })
+</script>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        let form = layui.form
+        let $ = layui.jquery
+        form.on('submit(user-save)', function (data) {
+            console.log(123123123)
+            var btn = $(this);
+            if (btn.hasClass('layui-btn-disabled')) {
+                return "已禁用，不再处理"; // 已禁用，不再处理
+            }
+            btn.addClass('layui-btn-disabled');
+
+            $.ajax({
+                url: '/system/preview/get_images',
+                dataType: 'json',
+                data: JSON.stringify(data.field),
+                contentType: 'application/json',
+                type: 'post',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 420}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                            parent.layui.table.reload('user-table')
+                        })
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000})
+                    }
+                }
+
+            })
+            return false
+        })
+    })
+</script>
+</html>

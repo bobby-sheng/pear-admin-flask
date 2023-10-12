@@ -1,0 +1,17 @@
+.main-container .layui-form-item{
+    display: flex;
+}
+
+.layui-form-label{
+    float: none;
+    width: 160px;
+}
+
+.layui-form-label input {
+    width: 100%;
+}
+
+.layui-input-block{
+    flex: 1;
+    margin-left: 0;
+}
