@@ -34,6 +34,7 @@ def data():
             'ctime': feishu["ctime"],
             'summary': feishu["summary"],
             'priority': feishu["priority"],
+            'release': feishu["release"],
             'labels': feishu["labels"],
             'assignee': feishu["assignee"],
             'record_id': feishu["record_id"],

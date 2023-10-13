@@ -75,6 +75,7 @@ class LinkFeiShu_V2(object):
                 re_data = {"ctime": formatted_date,
                            "summary": data_items.get("问题描述"),
                            "priority": data_items.get("优先级"),
+                           "release": data_items.get("发布类型"),
                            "labels": data_items.get("所属客户"),
                            "assignee": assignee_name,
                            "record_id": i.get("record_id"),

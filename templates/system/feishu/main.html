@@ -46,6 +46,7 @@
                 {title: '问题描述', field: 'summary', align: 'center', width: 220},
                 {title: '创建日期', field: 'ctime', align: 'center'},
                 {title: '优先级', field: 'priority', align: 'center'},
+                {title: '发布类型', field: 'release', align: 'center'},
                 {title: '所属客户', field: 'labels', align: 'center'},
                 {title: '问题处理人员', field: 'assignee', align: 'center'},
                 {title: 'record_id', field: 'record_id', align: 'center'},
@@ -201,20 +202,13 @@
                     dataType: 'json',
                     type: 'get',
                     success: function (result) {
+                        layer.close(loading)
                         if (result.success) {
-                            // layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                            //     layer.close(loading)
-                            //     location.reload()
-                            // })
-
                             layer.confirm('是否跳转到jira工单', {icon: 3, title: '提示'}, function (index) {
                                 layer.close(index);
-                                layer.close(loading)
                                 location.reload()
                                 window.open('https://jira.sky-cloud.net/browse/' + result.data, '_blank');
-
                             })
-
                         } else {
                             layer.msg(result.msg, {icon: 2, time: 1500})
                             layer.close(loading)
