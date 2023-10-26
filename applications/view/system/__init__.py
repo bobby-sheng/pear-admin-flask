@@ -17,6 +17,7 @@ from applications.view.system.history import bp as history
 from applications.view.system.jira import bp as jira
 from applications.view.system.feishu import bp as feishu_bp
 from applications.view.system.mitmweb import bp as mitmweb_bp
+from applications.view.system.json_to_yaml import bp as json_to_yaml_bp
 
 # 创建sys
 system_bp = Blueprint('system', __name__, url_prefix='/system')
@@ -29,6 +30,7 @@ def register_system_bps(app: Flask):
     system_bp.register_blueprint(history)
     system_bp.register_blueprint(jira)
     system_bp.register_blueprint(feishu_bp)
+    system_bp.register_blueprint(json_to_yaml_bp)
     system_bp.register_blueprint(mitmweb_bp)
     system_bp.register_blueprint(file_bp)
     system_bp.register_blueprint(monitor_bp)
