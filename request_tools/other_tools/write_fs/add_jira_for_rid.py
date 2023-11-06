@@ -21,6 +21,7 @@ class ISSUE_DATA(BaseModel):
     description: Optional[str]
     labels: Optional[list]
     priority: Optional[dict]
+    customfield_10507: Optional[dict] = {'value': 'Release'}
     customfield_10101: str = 'INET-90'
 
 
@@ -88,13 +89,15 @@ class addJiraData:
 
     def creat_jira(self):
         jira_cline = JIRA(server='https://jira.sky-cloud.net/', basic_auth=('shenbo.zhang', 'zhangshenbo#2023'))
+        customfield_10507 = {'value': 'Preview'} if "Preview发布" == self.release else {'value': "Release"}
         issue_data = ISSUE_DATA(summary=str(self.summary),
                                 assignee={'name': self.flip_name},
                                 priority={'id': self.priority},
                                 description=f"*发布类型:* {self.release}\n\n"
                                             f"*飞书连接:* https://sky-cloud.feishu.cn/base/OLbSbGZvraOZ9GsEWJXclpwInzh?table=tbldtje49iRghPbC&view=vewXxBNTOK&record={self.record_id}\n\n"
                                             f"*PS* :发布类型为 *Preview* 时使用客户镜像版本修改，类型为 *Release* 时使用dev镜像版本修复\n\n",
-                                labels=[self.description])
+                                labels=[self.description],
+                                customfield_10507=customfield_10507)
         issa = jira_cline.create_issue(dict(issue_data))
         return issa
 
