@@ -6,37 +6,37 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/prism/1.23.0/themes/prism-okaidia.min.css">
 </head>
 <body>
-    <div class="layui-container">
-        <div class="layui-row">
-            <div class="layui-col-md6">
-                <div class="layui-form layui-form-pane">
-                    <fieldset class="layui-elem-field">
-                        <legend>JSON</legend>
-                        <div class="layui-field-box">
-                            <textarea id="jsonTextarea" class="layui-textarea" rows="10" style="height: 300px;"></textarea>
-                        </div>
-                    </fieldset>
-                </div>
+<div class="layui-col-md6">
+    <div class="layui-form layui-form-pane">
+        <fieldset class="layui-elem-field">
+            <legend>JSON</legend>
+            <div class="layui-field-box">
+                <textarea id="jsonTextarea" class="layui-textarea" rows="10" style="height: 300px;"></textarea>
             </div>
-            <div class="layui-col-md6">
-                <div class="layui-form layui-form-pane">
-                    <fieldset class="layui-elem-field">
-                        <legend>YAML</legend>
-                        <div class="layui-field-box">
-                            <pre id="yamlTextarea" class="layui-code" style="height: 500px;"></pre>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-        <div class="layui-row">
-            <div class="layui-col-md-offset3 layui-col-md6">
-                <div class="layui-form layui-form-pane">
-                    <button id="convertBtn" class="layui-btn layui-btn-normal">Convert</button>
-                </div>
-            </div>
-        </div>
+        </fieldset>
     </div>
+    <div class="layui-form layui-form-pane">
+        <fieldset class="layui-elem-field">
+            <legend>jsonpath result</legend>
+            <div class="layui-field-box">
+                <textarea id="jsonpath_input" class="layui-textarea input-large" placeholder="使用jsonpath语法，如：$.data.id"></textarea>
+                <pre id="jsonpath_result" class="layui-textarea input-large" ></pre>
+            </div>
+        </fieldset>
+        <button id="convertBtn" class="layui-btn layui-btn-normal">Convert To Yaml</button>
+        <button id="convertBtn_jsonpath" class="layui-btn layui-btn-normal">Test JsonPath</button>
+    </div>
+</div>
+<div class="layui-col-md6">
+    <div class="layui-form layui-form-pane">
+        <fieldset class="layui-elem-field">
+            <legend>YAML</legend>
+            <div class="layui-field-box">
+                <pre id="yamlTextarea" class="layui-code" style="height: 500px;"></pre>
+            </div>
+        </fieldset>
+    </div>
+</div>
 
 <script src="https://cdn.staticfile.org/layui/2.5.6/layui.js"></script>
 <script src="https://cdn.staticfile.org/prism/1.23.0/prism.min.js"></script>
@@ -52,6 +52,14 @@
             var json = $('#jsonTextarea').val();
             $.post(MODULE_PATH + '/convert', {json: json}, function (data) {
                 $('#yamlTextarea').html('<code class="language-yaml">' + data + '</code>');
+                Prism.highlightAll();
+            });
+        });
+        $('#convertBtn_jsonpath').click(function () {
+            var json = $('#jsonTextarea').val();
+            var json_path = $('#jsonpath_input').val();
+            $.post(MODULE_PATH + '/jsonpath_to', {json: json,json_path:json_path}, function (data) {
+                $('#jsonpath_result').text(data);
                 Prism.highlightAll();
             });
         });
