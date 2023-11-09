@@ -62,6 +62,7 @@ class StoryToJira:
                            "assignee": assignee_name,
                            "record_id": i.get("record_id"),
                            "status": data_items.get("需求状态"),
+                           "number": data_items.get("需求编号"),
                            }
                 feishu_data.append(re_data)
             return feishu_data, response.get("data").get("total")

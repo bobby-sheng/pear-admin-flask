@@ -38,6 +38,7 @@ def data():
     insert_data = []
     for feishu in feishu_data:
         insert_data.append({
+            "number": feishu["number"],
             "status": feishu["status"],
             "ctime": str(feishu["ctime"]),
             "summary": feishu["summary"],
@@ -53,25 +54,23 @@ def data():
 
     # 获取请求参数
     summary = str_escape(request.args.get('summary', type=str))
-    assignee = str_escape(request.args.get('assignee', type=str))
-    labels = str_escape(request.args.get('labels', type=str))
-    release = str_escape(request.args.get('release', type=str))
+    status = str_escape(request.args.get('status', type=str))
+    number = str_escape(request.args.get('number', type=str))
 
     filters = []
     if summary:
         filters.append(FeiShuStory.summary.contains(summary))
-    if assignee:
-        filters.append(FeiShuStory.assignee.contains(assignee))
-    if labels:
-        filters.append(FeiShuStory.labels.contains(labels))
-    if release:
-        filters.append(FeiShuStory.release.contains(release))
+    if status:
+        filters.append(FeiShuStory.status.contains(status))
+    if number:
+        filters.append(FeiShuStory.number.contains(number))
     query = db.session.query(
         FeiShuStory,
     ).filter(*filters).layui_paginate()
 
     return table_api(
         data=[{
+            'number': feishu.number,
             'status': feishu.status,
             'ctime': feishu.ctime,
             'summary': feishu.summary,

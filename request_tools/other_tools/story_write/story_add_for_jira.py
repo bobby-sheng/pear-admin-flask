@@ -86,7 +86,8 @@ class StoryaddJiraData:
                                 assignee={'name': self.flip_name},
                                 priority={'id': self.priority},
                                 reporter={'name': self.flip_name},
-                                description=self.description)
+                                description=f"*工单描述:* {self.description}\n\n"
+                                            f"*飞书工单连接:* https://sky-cloud.feishu.cn/base/bascnt1hXiErmr5yYGXzu7gnkGb?table=tblBUGXLlPbhQpRP&view=vewMnpNgGD&record={self.record_id}\n\n")
         issa = jira_cline.create_issue(dict(issue_data))
         return issa
 
