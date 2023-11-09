@@ -3,6 +3,7 @@
 # Author: Bobby Sheng <Bobby@sky-cloud.net>
 from request_tools.other_tools.write_fs import update_document
 from request_tools.other_tools.write_fs import get_feishu_list
+from request_tools.other_tools.story_write import get_feishu_story
 
 def gorun():
     update_document.LinkFeiShu().write_feishu()
@@ -10,6 +11,11 @@ def gorun():
 
 def get_info():
     feishu_data, total = get_feishu_list.LinkFeiShu_V2().get_info_list()
+    return feishu_data, total
+
+
+def get_story_info():
+    feishu_data, total = get_feishu_story.StoryToJira().get_story_info_list()
     return feishu_data, total
 
 

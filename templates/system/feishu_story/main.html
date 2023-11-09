@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>客户环境部署</title>
+    {% include 'system/common/header.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='system/admin/css/other/preview.css') }}"/>
+</head>
+<body class="pear-container">
+{# 查询表单 #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="user-query-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">需求描述</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="summary" placeholder="" class="layui-input">
+                </div>
+                <label class="layui-form-label">负责人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="assignee" placeholder="" class="layui-input">
+                </div>
+                <label class="layui-form-label">需求分类</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="release" placeholder="" class="layui-input">
+                </div>
+                <label class="layui-form-label">客户</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="labels" placeholder="" class="layui-input">
+                </div>
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    查询
+                </button>
+                <button type="reset" class="pear-btn pear-btn-md">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{# 用户表格 #}
+<div class="user-main user-collasped">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <table id="user-table" lay-filter="user-table"></table>
+        </div>
+    </div>
+</div>
+</body>
+{# 用户修改操作 #}
+<script type="text/html" id="user-bar">
+    {% if authorize("system:feishu:edit") %}
+    <a class="pear-btn pear-btn-primary pear-btn-sm" lay-event="remove">创建Jira</a>
+    {% endif %}
+</script>
+{% include 'system/common/footer.html' %}
+<script>
+    function convertToDictionary(value) {
+        const dict = {};
+        const pairs = value.split(' ');
+        for (let i = 0; i < pairs.length; i++) {
+            const [key, val] = pairs[i].split(':');
+            dict[key.replaceAll("-", "_")] = val;
+        }
+        return dict;
+    }
+
+    layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let dropdown = layui.dropdown
+        let MODULE_PATH = "{{ url_for('system.feishu_story.main') }}"
+        // 表格数据
+        let cols = [
+            [
+                {title: '需求描述', field: 'summary', align: 'center', width: 220},
+                {title: '需求状态', field: 'status', align: 'center'},
+                {title: '提出人', field: 'put_name', align: 'center'},
+                {title: '优先级', field: 'priority', align: 'center'},
+                {title: '需求分类', field: 'release', align: 'center'},
+                {title: '客户', field: 'labels', align: 'center'},
+                {title: '负责人', field: 'assignee', align: 'center'},
+                {title: '提出日期', field: 'ctime', align: 'center'},
+                {title: 'record_id', field: 'record_id', align: 'center'},
+                {
+                    title: '操作',
+                    fixed: 'right',
+                    toolbar: '#user-bar',
+                    // align: 'center',
+                    width: 200,
+                    style: 'overflow:inherit;text-overflow: inherit;'
+                }
+            ]
+        ]
+        // 渲染表格数据
+        table.render({
+            elem: '#user-table',
+            url: MODULE_PATH + 'data',
+            page: true,
+            cols: cols,
+            skin: 'line',
+            cellMinWidth: 110,
+            height: 'full-148',
+            toolbar: '#user-toolbar', /*工具栏*/
+            text: {none: '暂无需要提交的工单'},
+            defaultToolbar: [{layEvent: 'refresh', icon: 'layui-icon-refresh'}, 'filter', 'print', 'exports'] /*默认工具栏*/
+        })
+        table.on('tool(user-table)', function (obj) {
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'more') {
+                dropdown.render({
+                    elem: this //触发事件的 DOM 对象
+                    , show: true //外部事件触发即显示
+                    , data: [{
+                        title: '部署全部'
+                        , id: 'deploy_all'
+                    }, {
+                        title: '部署单个'
+                        , id: 'deploy_one'
+                    }]
+                    , click: function (menudata) {
+                        if (menudata.id === 'deploy_all') {
+                            window.deploy_all(obj)
+                        } else if (menudata.id === 'deploy_one') {
+                            window.deploy_one(obj)
+                        }
+                    }
+                    , align: 'right' //右对齐弹出（v2.6.8 新增）
+                    , style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
+                })
+            }
+            if (obj.event === 'edit') {
+                window.edit(obj)
+            } else if (obj.event === 'remove') {
+                window.remove(obj)
+            }
+        })
+        table.on('toolbar(user-table)', function (obj) {
+            if (obj.event === 'add') {
+                window.add()
+            } else if (obj.event === 'cp_images') {
+                window.cp_images()
+            } else if (obj.event === 'deploy_log') {
+                window.deploy_log()
+            } else if (obj.event === 'refresh') {
+                window.refresh()
+            } else if (obj.event === 'batchRemove') {
+                window.batchRemove(obj)
+            } else if (obj.event === 'collasped') {
+                $('.user-left').toggleClass('user-collasped')
+                $('.user-main').toggleClass('user-collasped')
+                table.resize()
+            }
+        })
+
+        form.on('submit(user-query)', function (data) {
+            window.refresh(data.field)
+            return false
+        })
+
+
+        window.add = function () {
+            layer.open({
+                type: 2,
+                title: '新增',
+                shade: 0.1,
+                area: ['550px', '550px'],
+                content: MODULE_PATH + 'add'
+            })
+        }
+        window.deploy_log = function () {
+            layer.open({
+                type: 2,
+                title: '部署日志',
+                shade: 0.1,
+                area: ['1200px', '550px'],
+                content: MODULE_PATH + 'deploy_log'
+            })
+        }
+        window.cp_images = function () {
+
+            layer.prompt({
+                title: '粘贴linux复制的镜像信息',
+                area: ['550px', '550px'],
+                shade: 0.1,
+            }, function (value) {
+                layer.close(layer.index);
+                const dict_data = convertToDictionary(value);
+                layer.open({
+                    type: 2,
+                    title: '粘贴linux复制的镜像信息',
+                    shade: 0.1,
+                    area: ['550px', '550px'],
+                    content: MODULE_PATH + 'get_images_from?dict=' + encodeURIComponent(JSON.stringify(dict_data))
+                })
+            });
+        }
+        window.edit = function (obj) {
+            layer.open({
+                type: 2,
+                title: '修改',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: MODULE_PATH + 'edit/' + obj.data['record_id']
+            })
+        }
+        window.deploy_all = function (obj) {
+            layer.open({
+                type: 2,
+                title: '部署全部',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: MODULE_PATH + 'deploy_all/' + obj.data['id']
+            })
+        }
+        window.deploy_one = function (obj) {
+            layer.open({
+                type: 2,
+                title: '部署单个',
+                shade: 0.1,
+                area: ['550px', '500px'],
+                content: MODULE_PATH + 'deploy_one/' + obj.data['id']
+            })
+        }
+
+
+        window.remove = function (obj) {
+            layer.confirm('是否确定', {icon: 3, title: '提示'}, function (index) {
+                layer.close(index)
+                let loading = layer.load()
+                $.ajax({
+                    url: MODULE_PATH + 'remove/' + obj.data['record_id'],
+                    dataType: 'json',
+                    type: 'get',
+                    success: function (result) {
+                        layer.close(loading)
+                        if (result.success) {
+                            layer.confirm('是否跳转到jira工单', {icon: 3, title: '提示'}, function (index) {
+                                layer.close(index);
+                                location.reload()
+                                window.open('https://jira.sky-cloud.net/browse/' + result.data, '_blank');
+                            })
+                        } else {
+                            layer.msg(result.msg, {icon: 2, time: 1500})
+                            layer.close(loading)
+                        }
+                    }
+                })
+            })
+        }
+
+        window.refresh = function (param) {
+            table.reload('user-table', {where: param})
+        }
+    })
+</script>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        let form = layui.form
+        let $ = layui.jquery
+        form.on('submit(user-save)', function (data) {
+            console.log(123123123)
+            var btn = $(this);
+            if (btn.hasClass('layui-btn-disabled')) {
+                return "已禁用，不再处理"; // 已禁用，不再处理
+            }
+            btn.addClass('layui-btn-disabled');
+
+            $.ajax({
+                url: '/system/preview/get_images',
+                dataType: 'json',
+                data: JSON.stringify(data.field),
+                contentType: 'application/json',
+                type: 'post',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 420}, function () {
+                            parent.layer.res(parent.layer.getFrameIndex(window.name))//关闭当前页
+                            parent.layui.table.reload('user-table')
+                        })
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000})
+                    }
+                }
+
+            })
+            return false
+        })
+    })
+</script>
+</html>

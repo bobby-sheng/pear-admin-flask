@@ -11,3 +11,4 @@ from .admin_mail import Mail
 from .admin_preview import Preview
 from .admin_preview_log import PreviewLog
 from .admin_preview_history import Preview_history
+from .admin_feishu_story import FeiShuStory
