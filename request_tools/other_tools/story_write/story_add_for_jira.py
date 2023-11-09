@@ -96,7 +96,7 @@ class StoryaddJiraData:
         data = jsonpath.jsonpath(self.response, "$..fields")
         for i in data:
             i["Jira"] = {"link": f"https://jira.sky-cloud.net/browse/{issa_id}",
-                         "text": dict(i).get("需求描述")}
+                         "text": f"https://jira.sky-cloud.net/browse/{issa_id}"}
             payload = {"fields": i}
 
             url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/bascnt1hXiErmr5yYGXzu7gnkGb/tables/tblBUGXLlPbhQpRP/records/{self.record_id}"""
