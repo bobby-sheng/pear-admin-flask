@@ -82,7 +82,7 @@ class StoryaddJiraData:
 
     def creat_jira(self):
         jira_cline = JIRA(server='https://jira.sky-cloud.net/', basic_auth=('shenbo.zhang', 'zhangshenbo#2023'))
-        issue_data = ISSUE_DATA(summary=str(self.summary),
+        issue_data = ISSUE_DATA(summary=str(self.summary).replace("\n", ""),
                                 assignee={'name': self.flip_name},
                                 priority={'id': self.priority},
                                 reporter={'name': self.flip_name},
