@@ -26,7 +26,7 @@ class StoryaddJiraData:
             'Authorization': "Bearer " + self.tenant_access_token()
         }
         self.record_id = record_id
-        self.summary, self.description, self.priority, self.flip_name, self.response = self.check_records()
+        self.summary, self.description, self.priority, self.flip_name, self.record_url, self.response = self.check_records()
 
     def tenant_access_token(self):
         """获取引用tenant_access_token
@@ -66,19 +66,20 @@ class StoryaddJiraData:
         :return:
         """
 
-        url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/bascnt1hXiErmr5yYGXzu7gnkGb/tables/tblBUGXLlPbhQpRP/records/{self.record_id}"
+        url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/bascnt1hXiErmr5yYGXzu7gnkGb/tables/tblBUGXLlPbhQpRP/records/{self.record_id}?with_shared_url=true"
         response = requests.request("GET", url, headers=self.headers, data="").json()
         priority = self.get_priority(jsonpath.jsonpath(response, "$.data.record.fields.优先级")[0])
         summary = jsonpath.jsonpath(response, "$.data.record.fields.需求描述")[0]
         description = jsonpath.jsonpath(response, "$.data.record.fields.需求详细描述（可附文档）")
+        record_url = jsonpath.jsonpath(response, "$.data.record.record_url")[0]
         if description is False:
             description = ""
-        jira = jsonpath.jsonpath(response, "$.data.record.fields.Jira")
+        jira = jsonpath.jsonpath(response, "$.data.record.fields.Jira")[0]
         if jira:
             raise ValueError("此工单已存在jira，请刷新重试!}")
         else:
             flip_name = self.py_name("杨雨")
-            return summary, description, priority, flip_name, response
+            return summary, description, priority, flip_name, record_url, response
 
     def creat_jira(self):
         jira_cline = JIRA(server='https://jira.sky-cloud.net/', basic_auth=('shenbo.zhang', 'zhangshenbo#2023'))
@@ -87,7 +88,7 @@ class StoryaddJiraData:
                                 priority={'id': self.priority},
                                 reporter={'name': self.flip_name},
                                 description=f"*工单描述:* {self.description}\n\n"
-                                            f"*飞书工单连接:* https://sky-cloud.feishu.cn/base/bascnt1hXiErmr5yYGXzu7gnkGb?table=tblBUGXLlPbhQpRP&view=vewMnpNgGD&record={self.record_id}\n\n")
+                                            f"*飞书工单连接:* {self.record_url}\n\n")
         issa = jira_cline.create_issue(dict(issue_data))
         return issa
 

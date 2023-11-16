@@ -32,7 +32,7 @@ class addJiraData:
             'Authorization': "Bearer " + self.tenant_access_token()
         }
         self.record_id = record_id
-        self.summary, self.description, self.release, self.priority, self.flip_name, self.response = self.check_records()
+        self.summary, self.description, self.release, self.priority, self.flip_name, self.record_url, self.response = self.check_records()
 
     def tenant_access_token(self):
         """获取引用tenant_access_token
@@ -72,20 +72,21 @@ class addJiraData:
         :return:
         """
 
-        url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/OLbSbGZvraOZ9GsEWJXclpwInzh/tables/tbldtje49iRghPbC/records/{self.record_id}"
+        url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/OLbSbGZvraOZ9GsEWJXclpwInzh/tables/tbldtje49iRghPbC/records/{self.record_id}?with_shared_url=true"
         response = requests.request("GET", url, headers=self.headers, data="").json()
         priority = self.get_priority(jsonpath.jsonpath(response, "$.data.record.fields.优先级")[0])
         assignee = jsonpath.jsonpath(response, "$.data.record.fields.问题处理人员..name")
         summary = jsonpath.jsonpath(response, "$.data.record.fields.问题描述")[0]
         labels = jsonpath.jsonpath(response, "$.data.record.fields.所属客户")[0]
         release = jsonpath.jsonpath(response, "$.data.record.fields.发布类型")[0]
+        record_url = jsonpath.jsonpath(response, "$.data.record.record_url")[0]
 
         if "张圣波" in assignee:
             assignee.pop(assignee.index("张圣波"))
         if not assignee:
             raise ValueError(f"==={assignee}===,未分配除张圣波以外的研发修复人，请添加其他修复人再执行才会创建")
         flip_name = self.py_name(assignee[0])
-        return summary, labels, release, priority, flip_name, response
+        return summary, labels, release, priority, flip_name, record_url, response
 
     def creat_jira(self):
         jira_cline = JIRA(server='https://jira.sky-cloud.net/', basic_auth=('shenbo.zhang', 'zhangshenbo#2023'))
@@ -94,7 +95,7 @@ class addJiraData:
                                 assignee={'name': self.flip_name},
                                 priority={'id': self.priority},
                                 description=f"*发布类型:* {self.release}\n\n"
-                                            f"*飞书连接:* https://sky-cloud.feishu.cn/base/OLbSbGZvraOZ9GsEWJXclpwInzh?table=tbldtje49iRghPbC&view=vewXxBNTOK&record={self.record_id}\n\n"
+                                            f"*飞书连接:* {self.record_url}\n\n"
                                             f"*PS* :发布类型为 *Preview* 时使用客户镜像版本修改，类型为 *Release* 时使用dev镜像版本修复\n\n",
                                 labels=[self.description],
                                 customfield_10507=customfield_10507)
