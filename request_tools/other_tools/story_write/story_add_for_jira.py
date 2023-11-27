@@ -69,7 +69,7 @@ class StoryaddJiraData:
         url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/bascnt1hXiErmr5yYGXzu7gnkGb/tables/tblBUGXLlPbhQpRP/records/{self.record_id}?with_shared_url=true"
         response = requests.request("GET", url, headers=self.headers, data="").json()
         priority = self.get_priority(jsonpath.jsonpath(response, "$.data.record.fields.优先级")[0])
-        summary = jsonpath.jsonpath(response, "$.data.record.fields.需求描述")[0]
+        summary = jsonpath.jsonpath(response, "$.data.record.fields.需求标题")[0]
         description = jsonpath.jsonpath(response, "$.data.record.fields.需求详细描述（可附文档）")
         record_url = jsonpath.jsonpath(response, "$.data.record.record_url")[0]
         if description is False:
@@ -98,6 +98,11 @@ class StoryaddJiraData:
         for i in data:
             i["Jira"] = {"link": f"https://jira.sky-cloud.net/browse/{issa_id}",
                          "text": f"https://jira.sky-cloud.net/browse/{issa_id}"}
+            try:
+                del i["重复项"]
+                del i["父记录"]
+            except KeyError as e:
+                print(f"{e},找不到重复项目与父记录，不删除")
             payload = {"fields": i}
 
             url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/bascnt1hXiErmr5yYGXzu7gnkGb/tables/tblBUGXLlPbhQpRP/records/{self.record_id}"""
