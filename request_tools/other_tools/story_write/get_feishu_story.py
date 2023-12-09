@@ -45,16 +45,22 @@ class StoryToJira:
         feishu_data = []
         if "items" in response.get("data"):
             for i in response["data"]["items"]:
-                data_items = i.get("fields")
 
-                assignee_name = [n["name"] for n in data_items.get("负责人")]
-                put_name = [n["en_name"] for n in data_items.get("提出人")]
+                data_items = i.get("fields")
+                try:
+                    assignee_name = [n["name"] for n in data_items.get("负责人")]
+                except:
+                    assignee_name = None
+                try:
+                    put_name = [n["en_name"] for n in data_items.get("提出人")]
+                except:
+                    break
                 dt_object = datetime.datetime.fromtimestamp(data_items.get("提出日期") / 1000)
 
                 # 使用strftime方法将datetime对象转换为年月日格式
                 formatted_date = dt_object.strftime('%Y-%m-%d')
                 re_data = {"ctime": formatted_date,
-                           "summary": data_items.get("需求描述"),
+                           "summary": data_items.get("需求标题"),
                            "put_name": put_name,
                            "priority": data_items.get("优先级"),
                            "release": data_items.get("需求分类"),
@@ -68,7 +74,6 @@ class StoryToJira:
             return feishu_data, response.get("data").get("total")
         else:
             return [], 0
-
 
 
 if __name__ == '__main__':
