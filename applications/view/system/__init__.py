@@ -19,6 +19,7 @@ from applications.view.system.feishu import bp as feishu_bp
 from applications.view.system.mitmweb import bp as mitmweb_bp
 from applications.view.system.json_to_yaml import bp as json_to_yaml_bp
 from applications.view.system.feishu_story import bp as feishu_story_bp
+from applications.view.system.ctempalte import bp as ctempalte_bp
 
 # 创建sys
 system_bp = Blueprint('system', __name__, url_prefix='/system')
@@ -32,6 +33,7 @@ def register_system_bps(app: Flask):
     system_bp.register_blueprint(jira)
     system_bp.register_blueprint(feishu_bp)
     system_bp.register_blueprint(feishu_story_bp)
+    system_bp.register_blueprint(ctempalte_bp)
     system_bp.register_blueprint(json_to_yaml_bp)
     system_bp.register_blueprint(mitmweb_bp)
     system_bp.register_blueprint(file_bp)

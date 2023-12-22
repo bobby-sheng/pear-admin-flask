@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comparison Result</title>
+
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=utf-8"/>
+    <title></title>
+    <style type="text/css">
+        table.diff {
+            font-family: Courier;
+            border: medium;
+        }
+
+        .diff_header {
+            background-color: #e0e0e0
+        }
+
+        td.diff_header {
+            text-align: right
+        }
+
+        .diff_next {
+            background-color: #c0c0c0
+        }
+
+        .diff_add {
+            background-color: #aaffaa
+        }
+
+        .diff_chg {
+            background-color: #ffff77
+        }
+
+        .diff_sub {
+            background-color: #ffaaaa
+        }
+    </style>
+</head>
+
+<body>
+<div id="result"></div>
+<h1>Comparison Result</h1>
+<a href="https://www.67tool.com/text/diff" target="_blank">
+    <h2>点此查看不同点</h2>
+</a>
+<div class="sdasd" id="differences" style="display: none;">{{ differences }}</div>
+
+{% if differences %}
+{% for difference in differences %}
+<h2>{{ difference["不同原因"] }}</h2>
+<h3>名称: {{ difference["名称"] }}</h3>
+<table>
+    <tr>
+        <td>
+            <p>文件1</p>
+
+            <textarea class="file11" id="file1" rows="10" cols="50">{{ difference["文件1"] }}</textarea>
+        </td>
+        <td>
+            <p>文件2</p>
+            <textarea class="file22" id="file2" rows="10" cols="50">{{ difference["文件2"] }}</textarea>
+        </td>
+    </tr>
+</table>
+<br>
+
+{% endfor %}
+{% else %}
+<p>No differences found.</p>
+{% endif %}
+
+</body>
+
+</html>
