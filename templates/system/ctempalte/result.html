@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Comparison Result</title>
-
     <meta http-equiv="Content-Type"
           content="text/html; charset=utf-8"/>
     <title></title>
@@ -35,41 +34,64 @@
         .diff_sub {
             background-color: #ffaaaa
         }
+
+        .centered-content {
+            text-align: center;
+            display: flex; /* 使用Flexbox布局 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            /*height: -10vh; !* 制定高度，这里是视口高度 *!*/
+        }
+
+        .centered-content2 {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-<div id="result"></div>
-<h1>Comparison Result</h1>
-<a href="https://www.67tool.com/text/diff" target="_blank">
-    <h2>点此查看不同点</h2>
-</a>
+<div class="centered-content">
+    <div id="result"></div>
+</div>
+<div class="centered-content">
+    <a href="https://www.67tool.com/text/diff" target="_blank">
+        <h2>字符串对比详细</h2>
+    </a>
+</div>
+<div class="centered-content">
+    <a>
+        想看详细的对比情况，可以跳转至此网站复制内容对比
+    </a>
+</div>
+
+
 <div class="sdasd" id="differences" style="display: none;">{{ differences }}</div>
+<div>
+    {% if differences %}
+    {% for difference in differences %}
+    <div style="display: flex;flex-direction: column;align-items: center">
+        <h2 style="text-align: center">{{ difference["不同原因"] }}</h2>
+        <h3 style="text-align: center">名称: {{ difference["名称"] }}</h3>
+        <table>
+            <tr>
+                <td>
+                    <p>文件1</p>
 
-{% if differences %}
-{% for difference in differences %}
-<h2>{{ difference["不同原因"] }}</h2>
-<h3>名称: {{ difference["名称"] }}</h3>
-<table>
-    <tr>
-        <td>
-            <p>文件1</p>
+                    <textarea class="file11" id="file1" rows="10" cols="50">{{ difference["文件1"] }}</textarea>
+                </td>
+                <td>
+                    <p>文件2</p>
+                    <textarea class="file22" id="file2" rows="10" cols="50">{{ difference["文件2"] }}</textarea>
+                </td>
+            </tr>
+        </table>
 
-            <textarea class="file11" id="file1" rows="10" cols="50">{{ difference["文件1"] }}</textarea>
-        </td>
-        <td>
-            <p>文件2</p>
-            <textarea class="file22" id="file2" rows="10" cols="50">{{ difference["文件2"] }}</textarea>
-        </td>
-    </tr>
-</table>
-<br>
-
-{% endfor %}
-{% else %}
-<p>No differences found.</p>
-{% endif %}
-
+    </div>
+    {% endfor %}
+    {% else %}
+    <h2 style="text-align: center">对比结果：模版一致</h2>
+    {% endif %}
+</div>
 </body>
 
 </html>
