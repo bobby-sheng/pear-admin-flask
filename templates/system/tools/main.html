@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+    {% include 'system/common/header.html' %}
+    {% include 'system/common/footer.html' %}
+
+    <meta charset="utf-8">
+
+    <title>layui.form小例子</title>
+    <style>
+        .wh600 {
+            width: 600px;
+            height: 30px
+        }
+    </style>
+</head>
+<body>
+<div class="layui-tab">
+    <ul class="layui-tab-title">
+        <li class="layui-this iconfont icon-combined-shape-copy tooltip-icon liu_tips">环境信息同步</li>
+        <!--        <li>用户管理</li>-->
+        <!--        <li>权限分配</li>-->
+        <!--        <li>商品管理</li>-->
+        <!--        <li>订单管理</li> -->
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">源环境</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="srcip" placeholder="请输入" autocomplete="off" class="layui-input"
+                               value="192.168.30.81" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">源环境账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="srcuser" placeholder="请输入" autocomplete="off" class="layui-input"
+                               value="admin" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">源环境密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="srcpw" placeholder="请输入" autocomplete="off" class="layui-input"
+                               value="r00tme" lay-verify="required">
+                    </div>
+                </div>
+                <!--                <hr class="layui-bg-red" style="height: 1px">-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目环境</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="dstip" placeholder="请输入" autocomplete="off" class="layui-input"
+                               value="192.168.30.82" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目环境账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="dstuser" placeholder="请输入" autocomplete="off" class="layui-input"
+                               value="admin" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目环境密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="dstpw" placeholder="请输入" autocomplete="off" class="layui-input"
+                               value="r00tme" lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">同步动作</label>
+                    <div class="layui-input-block">
+                        <select name="interest" lay-filter="aihao">
+                            <option value="1">同步模版</option>
+                            <option value="2">同步模版与设备</option>
+                            <option value="3">同步模版、设备、配置</option>
+                            <option value="4">同步模版、设备、拓扑</option>
+                            <option value="5">同步所有，模版、设备、配置、拓扑</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="demo2">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <button type="button" class="layui-btn layui-btn-primary" lay-on="msg">点击查看功能说明</button>
+                    </div>
+                </div>
+                <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+            </form>
+
+        </div>
+        <div class="layui-form layui-form-pane">
+            <fieldset class="layui-elem-field">
+                <legend>日志</legend>
+                <div class="layui-field-box">
+                    <pre id="yamlTextarea" class="layui-code" style="height: 500px;"></pre>
+                </div>
+            </fieldset>
+        </div>
+        <!--        <div class="layui-tab-item">内容2</div>-->
+        <!--        <div class="layui-tab-item">内容3</div>-->
+        <!--        <div class="layui-tab-item">内容4</div>-->
+        <!--        <div class="layui-tab-item">内容5</div>-->
+    </div>
+</div>
+
+<script>
+    layui.use(['layer', 'util', 'form', 'jquery'], function () {
+        var layer = layui.layer;
+        var util = layui.util;
+        var form = layui.form;
+        let $ = layui.jquery
+        util.on('lay-on', {
+            msg: function () {
+                layer.msg('从源环境把选择的资源同步到目环境！');
+            },
+
+        });
+        form.on('submit(demo2)', function (data) {
+            $.ajax({
+                url: '/system/tools/transfer_main_todo',
+                dataType: 'json',
+                data: JSON.stringify(data.field),
+                contentType: 'application/json',
+                type: 'post',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 420}, {})
+                        $('#yamlTextarea').html('<code class="language-yaml">' + result.data + '</code>');
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000})
+                    }
+
+                }
+            });
+            return false
+        });
+    });
+
+</script>
