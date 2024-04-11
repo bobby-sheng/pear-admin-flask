@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 # Author: Bobby Sheng <Bobby@sky-cloud.net>
 import jsonpath
-import logging
+from .filelog import logger
 from .move_device import Device
 from .common import ensure_path_sep, get_yaml_data
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 Config = get_yaml_data(ensure_path_sep("\\transfer\\config.yaml"))
 
 
@@ -34,7 +33,7 @@ class MoveConfig(Device):
         res = self.src_session.get(url).json()
         assert res['code'] == 200, f"读取{config_type}模版列表失败{res}"
         if jsonpath.jsonpath(res, "$.data.count")[0] == 0:
-            logging.info(f"设备 [{device_name}] {config_type}配置为空，跳过")
+            logger.info(f"设备 [{device_name}] {config_type}配置为空，跳过")
             config_route_raw = "NO CONFIG!"
         else:
             config_route_id = jsonpath.jsonpath(res, "$.data.list[0]..id")[0]
@@ -76,7 +75,7 @@ class MoveConfig(Device):
         choose_device_config_url = f"http://{Config.get('dst')['host']}{choose_device_config_path}"
         choose_device_config_res = self.dst_session.patch(choose_device_config_url).json()
         assert choose_device_config_res['code'] == 200, f"目的环选择当前配置文件失败{choose_device_config_res}"
-        logging.info(f"[{device_name},{device_id}] 设备上传{config_type}配置文件成功")
+        logger.info(f"[{device_name},{device_id}] 设备上传{config_type}配置文件成功")
 
     def sky_firewall_add_config(self, up_type, device_data):
         """

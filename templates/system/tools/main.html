@@ -30,9 +30,12 @@
                     <label class="layui-form-label">源环境</label>
                     <div class="layui-input-block">
                         <input type="text" name="srcip" placeholder="请输入" autocomplete="off" class="layui-input"
-                               value="192.168.30.81" lay-verify="required">
+                               value="192.168.30.51" lay-verify="required">
                     </div>
                 </div>
+                <h1 id="tishimsg" style="text-align: center;color: #c40a2c;display: none">
+                    请保留在此界面，执行完成可以看日志是否有问题！！</h1>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">源环境账号</label>
                     <div class="layui-input-block">
@@ -47,12 +50,13 @@
                                value="r00tme" lay-verify="required">
                     </div>
                 </div>
+
                 <!--                <hr class="layui-bg-red" style="height: 1px">-->
                 <div class="layui-form-item">
                     <label class="layui-form-label">目环境</label>
                     <div class="layui-input-block">
                         <input type="text" name="dstip" placeholder="请输入" autocomplete="off" class="layui-input"
-                               value="192.168.30.82" lay-verify="required">
+                               value="192.168.30.51" lay-verify="required">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -84,7 +88,7 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="demo2">立即提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <button id="re_display" type="reset" class="layui-btn layui-btn-primary">重置</button>
                         <button type="button" class="layui-btn layui-btn-primary" lay-on="msg">点击查看功能说明</button>
                     </div>
                 </div>
@@ -92,7 +96,7 @@
             </form>
 
         </div>
-        <div class="layui-form layui-form-pane">
+        <div id="mydisplay" class="layui-form layui-form-pane" style="display:none">
             <fieldset class="layui-elem-field">
                 <legend>日志</legend>
                 <div class="layui-field-box">
@@ -109,6 +113,9 @@
 
 <script>
     layui.use(['layer', 'util', 'form', 'jquery'], function () {
+        var mydisplay = document.getElementById("mydisplay")
+        var tishimsg = document.getElementById("tishimsg")
+
         var layer = layui.layer;
         var util = layui.util;
         var form = layui.form;
@@ -117,9 +124,22 @@
             msg: function () {
                 layer.msg('从源环境把选择的资源同步到目环境！');
             },
-
+        });
+        $('#re_display').click(function () {
+            if (mydisplay.style.display = "block") {
+                mydisplay.style.display = "none"
+            }
         });
         form.on('submit(demo2)', function (data) {
+            mydisplay.style.display = "block"
+            var loading = layer.load(3, {
+                shade: [0.1, '#c51515'],
+                content: '<span class="loadtip">加载中</span>',
+                success: function (layer) {
+                    tishimsg.style.display = "block"
+                }
+            });
+
             $.ajax({
                 url: '/system/tools/transfer_main_todo',
                 dataType: 'json',
@@ -127,8 +147,11 @@
                 contentType: 'application/json',
                 type: 'post',
                 success: function (result) {
+                    console.log(result)
                     if (result.success) {
                         layer.msg(result.msg, {icon: 1, time: 420}, {})
+                        layer.close(loading)
+                        tishimsg.style.display = "none"
                         $('#yamlTextarea').html('<code class="language-yaml">' + result.data + '</code>');
                     } else {
                         layer.msg(result.msg, {icon: 2, time: 1000})

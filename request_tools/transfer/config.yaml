@@ -1,59 +1,44 @@
-src: # 源平台，数据获取的环境
-  host: 192.168.30.83
-  username: admin
+add_device_config: /api/sky-nap/device/rawconfig
+add_device_config_route: /api/sky-nap/device/route
+add_device_credential: /api/sky-nap/device/credential
+add_sky_biz_domain: /api/sky-nap/device-group/sky_biz_domain?upperId=sky_idc_id&upperModelKey=sky_idc
+add_sky_firewall: /api/sky-nap/task/add-firewall
+add_sky_gateway: /api/sky-nap//task/add-gateway
+add_sky_idc: /api/sky-nap/device-group/sky_idc?upperId=project_id&upperModelKey=project
+add_sky_loadbalancer: /api/sky-nap/task/add-load-balance
+add_sky_switch_router: /api/sky-nap/task/add-switch-router
+add_topo: /api/sky-nap/topology
+add_type: /api/sky-nap/device/type
+add_vendor: /api/sky-nap/device/vendor
+add_version: /api/sky-nap/device/version
+choose_device_config: /api/sky-nap/device/rawconfig/device_id/active/config_id
+choose_device_config_route: /api/sky-nap/device/route/device_id/active/route_id
+dst:
+  host: 192.168.30.51
   password: r00tme
-
-dst: # 目的平台，数据迁移的目的环境
-  host: 192.168.30.54
   username: admin
+get_cmdb_sky_firewall_id: /api/sky-cmdb/resource/instance/list/sky_firewall?page=0&size=20
+get_cmdb_sky_gateway_id: /api/sky-cmdb/resource/instance/list/sky_gateway?page=0&size=20
+get_cmdb_sky_loadbalancer_id: /api/sky-cmdb/resource/instance/list/sky_loadbalancer?page=0&size=20
+get_cmdb_sky_switch_router_id: /api/sky-cmdb/resource/instance/list/sky_switch_router?page=0&size=20
+get_device_config_info: /api/sky-nap/device/rawconfig/config_id
+get_device_config_list: /api/sky-nap/device/rawconfig?deviceId=device_id&page=0&size=20
+get_device_config_route_info: /api/sky-nap/device/route/config_id
+get_device_config_route_list: /api/sky-nap/device/route?deviceId=device_id&page=0&size=20
+get_device_credential_list: /api/sky-nap/device/credential?page=0&size=1000
+get_device_tree_api: /api/sky-nap/device-group
+get_sky_firewall_info: /api/sky-nap/firewall/device_id
+get_sky_gateway: /api/sky-nap/gateway/get_sky_gateway_id
+get_sky_loadbalancer: /api/sky-nap/load-balance/sky_loadbalancer_id
+get_sky_switch_router: /api/sky-nap/switch-router/sky_switch_router_id
+get_topo_info: /api/sky-nap/topology/src_topo_id
+get_topo_list: /api/sky-nap/topology?page=0
+src:
+  host: 192.168.30.51
   password: r00tme
-
-
-# ==========下 面 无 需 改 动====================
-# 同步模版依赖接口
-version_list_api: /api/sky-nap/device/version/list?page=0&size=1000 # 获取version列表数据接口
-type_list_api: /api/sky-nap/device/type?keyword=&page=0&size=1000 # 获取type列表数据接口
-vendor_list_api: /api/sky-nap/device/vendor?keyword=&page=0&size=1000 # 获取type列表数据接口
-version_template_info: /api/sky-nap/device/version/version_id #模版详情接口
-write_template_api: /api/sky-nap/device/template/list # 上传模版接口
-add_vendor: /api/sky-nap/device/vendor # 新建厂商
-add_type: /api/sky-nap/device/type # 新建型号
-add_version: /api/sky-nap/device/version # 新建型号
-
-
-# 同步设备需要使用的接口
-get_device_tree_api: /api/sky-nap/device-group # 获取设备树列表api
-add_device_credential: /api/sky-nap/device/credential #新建连接凭证
-get_device_credential_list: /api/sky-nap/device/credential?page=0&size=1000 #获取连接凭证列表
-add_sky_idc: /api/sky-nap/device-group/sky_idc?upperId=project_id&upperModelKey=project #新建数据中心
-add_sky_biz_domain: /api/sky-nap/device-group/sky_biz_domain?upperId=sky_idc_id&upperModelKey=sky_idc #新建业务域
-add_sky_firewall: /api/sky-nap/task/add-firewall # 增加防火墙
-get_sky_firewall_info: /api/sky-nap/firewall/device_id #获取防火墙详情
-add_sky_loadbalancer: /api/sky-nap/task/add-load-balance # 增加负载均衡
-get_sky_loadbalancer: /api/sky-nap/load-balance/sky_loadbalancer_id #获取负载均衡详情
-add_sky_switch_router: /api/sky-nap/task/add-switch-router # 增加路由交换
-get_sky_switch_router:  /api/sky-nap/switch-router/sky_switch_router_id # 获取路由交换
-add_sky_gateway: /api/sky-nap//task/add-gateway  #获取虚拟网关详情
-get_sky_gateway: /api/sky-nap/gateway/get_sky_gateway_id  #获取虚拟网关详情
-get_cmdb_sky_firewall_id: /api/sky-cmdb/resource/instance/list/sky_firewall?page=0&size=20 # cmdb防火墙数据列表api {"name":"234"} post
-get_cmdb_sky_loadbalancer_id: /api/sky-cmdb/resource/instance/list/sky_loadbalancer?page=0&size=20 # cmdb负载均衡数据列表api {"name":"234"} post
-get_cmdb_sky_gateway_id: /api/sky-cmdb/resource/instance/list/sky_gateway?page=0&size=20 # cmdb虚拟网关数据列表api {"name":"234"} post
-get_cmdb_sky_switch_router_id: /api/sky-cmdb/resource/instance/list/sky_switch_router?page=0&size=20 # cmdb路由交换数据列表api {"name":"234"} post
-
-
-# 同步设备配置需要使用的接口
-get_device_config_list: /api/sky-nap/device/rawconfig?deviceId=device_id&page=0&size=20  # 设备配置列表
-get_device_config_info: /api/sky-nap/device/rawconfig/config_id  # 配置详情接口
-get_device_config_route_list: /api/sky-nap/device/route?deviceId=device_id&page=0&size=20  # 设备路由配置列表
-get_device_config_route_info: /api/sky-nap/device/route/config_id  # 路由配置详情接口
-add_device_config: /api/sky-nap/device/rawconfig  # 上传配置接口
-add_device_config_route: /api/sky-nap/device/route  # 上传路由接口
-choose_device_config: /api/sky-nap/device/rawconfig/device_id/active/config_id # 设置配置为当前api
-choose_device_config_route: /api/sky-nap/device/route/device_id/active/route_id # 设置路由配置为当前api
-
-
-# 同步拓扑需要使用的接口
-get_topo_list: /api/sky-nap/topology?page=0 # 获取所有拓扑信息
-add_topo: /api/sky-nap/topology #新增拓扑
-get_topo_info: /api/sky-nap/topology/src_topo_id #获取拓扑详情
-
+  username: admin
+type_list_api: /api/sky-nap/device/type?keyword=&page=0&size=1000
+vendor_list_api: /api/sky-nap/device/vendor?keyword=&page=0&size=1000
+version_list_api: /api/sky-nap/device/version/list?page=0&size=1000
+version_template_info: /api/sky-nap/device/version/version_id
+write_template_api: /api/sky-nap/device/template/list

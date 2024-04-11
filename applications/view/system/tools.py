@@ -35,5 +35,6 @@ def transfer_main_todo():
             'password': data["dstpw"]
         }
     }
-    data = transfer_main(new_data, data["interest"])
+
+    data = transfer_main(new_data, int(data["interest"]))
     return success_api(msg="提交成功", data=data)

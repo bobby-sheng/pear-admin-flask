@@ -3,11 +3,10 @@
 # Author: Bobby Sheng <Bobby@sky-cloud.net>
 import jsonpath
 import time
-import logging
+from .filelog import logger
 from .move_template import Template
 from .common import ensure_path_sep, get_yaml_data
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 Config = get_yaml_data(ensure_path_sep("\\transfer\\config.yaml"))
 
 
@@ -35,12 +34,12 @@ class Device(Template):
                 "description": "device_move", "userName": "admin"}
         credential_res = self.dst_session.post(url, json=data).json()
         if "已经存在" in credential_res["message"]:
-            logging.info("连接凭证已经存在，获取id！")
+            logger.info("连接凭证已经存在，获取id！")
             list_url = f"http://{Config.get('dst')['host']}{Config.get('get_device_credential_list')}"
             credential_list_res = self.dst_session.get(list_url).json()
             credential_id = jsonpath.jsonpath(credential_list_res, "$.data.list.[?(@.name=='device_move')].id")[0]
         else:
-            logging.info("新建连接凭证！")
+            logger.info("新建连接凭证！")
             credential_id = jsonpath.jsonpath(credential_res, "$.data.id")[0]
         return credential_id
 
@@ -56,7 +55,7 @@ class Device(Template):
         url = f"http://{Config.get('dst')['host']}{add_sky_idc_path}"
         add_sky_idc_res = self.dst_session.post(url, json=data).json()
         assert add_sky_idc_res['code'] == 200
-        logging.info(f"新增数据中心完成 {add_sky_idc_res['data']['id']}")
+        logger.info(f"新增数据中心完成 {add_sky_idc_res['data']['id']}")
         return add_sky_idc_res['data']['id']
 
     def add_sky_biz_domain(self, data, sky_idc_id):
@@ -71,7 +70,7 @@ class Device(Template):
         url = f"http://{Config.get('dst')['host']}{add_sky_biz_domain_path}"
         add_sky_biz_domain_res = self.dst_session.post(url, json=data).json()
         assert add_sky_biz_domain_res['code'] == 200, f"业务域新增失败{add_sky_biz_domain_res}"
-        logging.info(f"新增业务域完成 {add_sky_biz_domain_res['data']['id']}")
+        logger.info(f"新增业务域完成 {add_sky_biz_domain_res['data']['id']}")
         return add_sky_biz_domain_res['data']['id']
 
     def get_device_info(self, modelKey: str, device_id):
@@ -79,8 +78,8 @@ class Device(Template):
         获取src防火墙设备详情
         :return:
         """
-        logging.info("=================================开始新增设备！================================= ")
-        logging.info(f"获取src设备 {device_id} 参数，和版本id")
+        logger.info("=================================开始新增设备！================================= ")
+        logger.info(f"获取src设备 {device_id} 参数，和版本id")
         sky_firewall_res = ""
         if modelKey == "sky_firewall":
             url_path = str(Config.get('get_sky_firewall_info')).replace("device_id", device_id)
@@ -119,7 +118,7 @@ class Device(Template):
         device_type = jsonpath.jsonpath(res, "$.data.typeId")[0]
         version = jsonpath.jsonpath(res, "$.data.id")[0]
         assert version == dst_version_id, f"dst_id 与接口返回的version_id不一致{version},{dst_version_id}"
-        logging.info("处理dst设备应该绑定的版本id")
+        logger.info("处理dst设备应该绑定的版本id")
         return vendor, device_type, version
 
     def handle_firewall_data(self, modelKey, device_info, vendor=None, device_type=None, version=None,
@@ -194,7 +193,7 @@ class Device(Template):
             refined_info['collectType'] = "AUTOMATIC"
             refined_info['haGroup'] = []
             device_refined_info = refined_info
-            logging.info(f"dst防火墙设备参数处理完成! {device_refined_info['name']}")
+            logger.info(f"dst防火墙设备参数处理完成! {device_refined_info['name']}")
         elif modelKey == "sky_loadbalancer":
             keys_to_remove = ['id', 'deviceType', 'vendorName', 'vendorIcon', 'typeName', 'versionName', 'state',
                               'deviceGroupName',
@@ -243,7 +242,7 @@ class Device(Template):
             refined_info['collectType'] = "AUTOMATIC"
             refined_info['haGroup'] = []
             device_refined_info = refined_info
-            logging.info(f"dst负载均衡设备参数处理完成! {device_refined_info['name']}")
+            logger.info(f"dst负载均衡设备参数处理完成! {device_refined_info['name']}")
         elif modelKey == "sky_switch_router":
             keys_to_remove = ['id', 'deviceType', 'vendorName', 'vendorIcon', 'typeName', 'versionName', 'state',
                               'deviceGroupName', 'credentialName', 'deviceStateJobs', 'confSetAddressRefType',
@@ -298,7 +297,7 @@ class Device(Template):
                 }
             ]
             device_refined_info = refined_info
-            logging.info(f"dst路由交换设备参数处理完成! {device_refined_info['name']}")
+            logger.info(f"dst路由交换设备参数处理完成! {device_refined_info['name']}")
 
         elif modelKey == "sky_gateway":
             keys_to_remove = ['id', 'deviceType', 'vendorName', 'vendorIcon', 'typeName', 'versionName',
@@ -306,7 +305,7 @@ class Device(Template):
                               'authoritySettings']
             refined_info = {k: v for k, v in device_info.items() if k not in keys_to_remove}
             device_refined_info = refined_info
-            logging.info(f"dst虚拟网关设备参数处理完成! {device_refined_info['name']}")
+            logger.info(f"dst虚拟网关设备参数处理完成! {device_refined_info['name']}")
         if vendor is not None:
             device_refined_info['vendor'] = vendor
         if device_type is not None:
@@ -317,7 +316,7 @@ class Device(Template):
             device_refined_info['deviceGroup'] = deviceGroup
         device_refined_info['credential'] = self.add_credential_id
 
-        # logging.info(f"新建设备使用参数 {json.dumps(device_refined_info)}")
+        # logger.info(f"新建设备使用参数 {json.dumps(device_refined_info)}")
 
         return device_refined_info
 
@@ -333,16 +332,16 @@ class Device(Template):
             url = f"http://{Config.get('dst')['host']}{add_sky_firewall_url}"
             add_firewall_res = self.dst_session.post(url, json=data).json()
             assert add_firewall_res['code'] == 200, f"新建设备失败{add_firewall_res}"
-            logging.info(f"=================================新增防火墙完成！================================= {data['name']}")
+            logger.info(f"=================================新增防火墙完成！================================= {data['name']}")
             return add_firewall_res
 
         elif modelKey == "sky_loadbalancer":
             add_sky_loadbalancer_url = str(Config.get('add_sky_loadbalancer'))
             url = f"http://{Config.get('dst')['host']}{add_sky_loadbalancer_url}"
             add_sky_loadbalancer_res = self.dst_session.post(url, json=data).json()
-            logging.info(add_sky_loadbalancer_res)
+            logger.info(add_sky_loadbalancer_res)
             assert add_sky_loadbalancer_res['code'] == 200, f"新建设备失败{add_sky_loadbalancer_res}"
-            logging.info(f"=================================新增负载均衡完成！================================= {data['name']}")
+            logger.info(f"=================================新增负载均衡完成！================================= {data['name']}")
             return add_sky_loadbalancer_res
 
         elif modelKey == "sky_switch_router":
@@ -350,7 +349,7 @@ class Device(Template):
             url = f"http://{Config.get('dst')['host']}{add_sky_switch_router_url}"
             add_sky_switch_router_res = self.dst_session.post(url, json=data).json()
             assert add_sky_switch_router_res['code'] == 200, f"新建设备失败{add_sky_switch_router_res}"
-            logging.info(f"=================================新增路由交换完成！================================= {data['name']}")
+            logger.info(f"=================================新增路由交换完成！================================= {data['name']}")
             return add_sky_switch_router_res
 
         elif modelKey == "sky_gateway":
@@ -358,10 +357,10 @@ class Device(Template):
             url = f"http://{Config.get('dst')['host']}{sky_gateway_url}"
             sky_gateway_res = self.dst_session.post(url, json=data).json()
             assert sky_gateway_res['code'] == 200, f"新建设备失败{sky_gateway_res}"
-            logging.info(f"=================================新增虚拟网关完成！================================= {data['name']}")
+            logger.info(f"=================================新增虚拟网关完成！================================= {data['name']}")
             return sky_gateway_res
         else:
-            logging.info(f"不支持新增此类型号设备！ {data}")
+            logger.info(f"不支持新增此类型号设备！ {data}")
 
     def get_cmdb_device_id(self, device_name, modelKey):
         """
@@ -397,7 +396,7 @@ class Device(Template):
 
             device_id = jsonpath.jsonpath(cmdb_list_res, device_get_id_path)
             if device_id:
-                logging.info(f"=================================获取设备ID为 {device_id} =================================")
+                logger.info(f"=================================获取设备ID为 {device_id} =================================")
                 return device_id[0]
 
             # 如果没有得到期望的值，等待两秒后进行下一次请求
@@ -441,7 +440,7 @@ class Device(Template):
         设备读写设备信息在dst环境新增
         :return:
         """
-        # logging.info(self.dst_device_data_res)
+        # logger.info(self.dst_device_data_res)
         for child in data['child']:
             info_data = {
                 "id": child["id"],
@@ -455,7 +454,7 @@ class Device(Template):
                 if info_data_copy in dst_devices_list:
                     jsonpath_rule = f"$.data..[?(@.modelName=='{self.mapping[1]}' && @.name=='{info_data['name']}')].id"
                     sky_idc = jsonpath.jsonpath(self.dst_device_data_res, jsonpath_rule)[0]
-                    logging.info(f"数据中心已存在，获取id {sky_idc} {info_data['name']}")
+                    logger.info(f"数据中心已存在，获取id {sky_idc} {info_data['name']}")
                 else:
                     sky_idc = self.add_sky_idc({"name": info_data["name"], "desc": "move_devices"}, project_id)
                 self.sky_idc = sky_idc
@@ -464,21 +463,21 @@ class Device(Template):
                     jsonpath_rule = \
                         f"$.data..child.[?(@.modelName=='{self.mapping[2]}' && @.name=='{info_data['name']}')].id"
                     sky_biz_domain_id = jsonpath.jsonpath(self.dst_device_data_res, jsonpath_rule)[0]
-                    logging.info(f"业务域已存在，获取id {sky_biz_domain_id} {info_data['name']}")
+                    logger.info(f"业务域已存在，获取id {sky_biz_domain_id} {info_data['name']}")
                 else:
                     sky_biz_domain_id = self.add_sky_biz_domain({"name": info_data["name"]}, self.sky_idc)
                 self.sky_biz_domain_id = sky_biz_domain_id
                 info_data["sky_idc"] = self.sky_idc
             else:
-                # logging.info(self.mapping[tag], info_data_copy)
+                # logger.info(self.mapping[tag], info_data_copy)
                 if info_data_copy in dst_devices_list:
                     get_device_path = f"$..child[?(@.name=='{info_data['name']}' && @.modelKey=='{info_data['modelKey']}')].id"
                     device_id = jsonpath.jsonpath(self.dst_device_data_res, get_device_path)[0]
                     info_data["device_id"] = device_id
-                    logging.info(f"[{info_data['name']}]:设备已存在，获取id: {device_id}")
+                    logger.info(f"[{info_data['name']}]:设备已存在，获取id: {device_id}")
                 else:
                     if str(info_data["modelKey"]) == "sky_contrail":
-                        logging.info("====================SND设备跳过====================")
+                        logger.info("====================SND设备跳过====================")
                         continue
 
                     info_data["sky_biz_domain"] = self.sky_biz_domain_id
@@ -510,11 +509,11 @@ class Device(Template):
                                                          modelKey=info_data["modelKey"])
                         info_data["device_id"] = device_id
                     else:
-                        logging.info(
+                        logger.info(
                             f"========={self.mapping[tag]} 连接协议为空，为假设备，不新建====={info_data_copy}====================",
                         )
             device_relation_list.append(info_data)
-            # logging.info(self.mapping[tag], info_data)
+            # logger.info(self.mapping[tag], info_data)
             self.src_fun(child, tag + 1, dst_devices_list, project_id, template_relation, device_relation_list)
 
     def read_write_devices(self, template_relation):
@@ -529,7 +528,7 @@ class Device(Template):
         dst_devices_list = self.dst_get_tree_data()
         for i in src_device_data_res["data"]:
             self.src_fun(i, 1, dst_devices_list, i["id"], template_relation, device_relation_list)
-        # logging.info(device_relation_list)
+        # logger.info(device_relation_list)
         return device_relation_list
 
 if __name__ == '__main__':

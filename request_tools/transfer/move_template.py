@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 # Author: Bobby Sheng <Bobby@sky-cloud.net>
 import jsonpath
-import logging
+from .filelog import logger
 from .login import Login
 from .common import ensure_path_sep, get_yaml_data
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 Config = get_yaml_data(ensure_path_sep("\\transfer\\config.yaml"))
 
 
@@ -47,7 +46,7 @@ class Template(Login):
         data = {"sorts": {}, "filters": {}}
         res = self.src_session.post(url, json=data).json()
         assert res["code"] == 200, "源环境登录失败，请检查账号密码是否正常"
-        logging.info("======获取src模版信息成功======")
+        logger.info("======获取src模版信息成功======")
         str_output = self.data_treating(res, 'src', self.src_session)
         return str_output
 
@@ -60,7 +59,7 @@ class Template(Login):
         data = {"sorts": {}, "filters": {}}
         res = self.dst_session.post(url, json=data).json()
         assert res["code"] == 200, "目的环境登录失败，请检查账号密码是否正常"
-        logging.info("======获取dst模版信息成功======")
+        logger.info("======获取dst模版信息成功======")
         dst_output = self.data_treating(res, 'dst', self.dst_session)
         return dst_output
 
@@ -75,7 +74,7 @@ class Template(Login):
             for d, t in dst_output.items():
                 if r == t:
                     r['dst_id'] = d
-        logging.info("checking：检查src，dst环境模版之间的差异！")
+        logger.info("checking：检查src，dst环境模版之间的差异！")
         return str_output
 
     @staticmethod
@@ -109,7 +108,7 @@ class Template(Login):
         # version_data = {'name': '12', 'vendorName': 'Huawei', 'workingType': 'CLI', 'typeName': 'CE12800',
         #                 'deviceType': 'sky_switch_router'}
 
-        logging.info("======开始新增==========")
+        logger.info("======开始新增==========")
         vendor_res_id = ""
         type_res_id = ""
         version_res_id = ""
@@ -126,8 +125,8 @@ class Template(Login):
             json_vendor_list = f'$.data.list[?(@.name=="{version_data["vendorName"]}")].id'
             vendor_res_id = jsonpath.jsonpath(get_vendor_list_res, json_vendor_list)[0]
         else:
-            logging.info(f"新建{version_data['vendorName']}失败，并且在dst环境中也无法找到此厂商，请检查！！")
-        logging.info(f"厂商id：{vendor_res_id}")
+            logger.info(f"新建{version_data['vendorName']}失败，并且在dst环境中也无法找到此厂商，请检查！！")
+        logger.info(f"厂商id：{vendor_res_id}")
 
         # 新增型号
         type_url = f"http://{Config.get('dst')['host']}{Config.get('add_type')}"
@@ -145,8 +144,8 @@ class Template(Login):
             json_type_list = f'$.data.list[?(@.name=="{version_data["typeName"]}")].id'
             type_res_id = jsonpath.jsonpath(get_type_list_res, json_type_list)[0]
         else:
-            logging.info(f"新建{version_data['vendorName']}失败，并且在dst环境中也无法找到此型号，请检查！！")
-        logging.info(f"型号id：{type_res_id}")
+            logger.info(f"新建{version_data['vendorName']}失败，并且在dst环境中也无法找到此型号，请检查！！")
+        logger.info(f"型号id：{type_res_id}")
 
         # 新增版本
         version_url = f"http://{Config.get('dst')['host']}{Config.get('add_version')}"
@@ -163,14 +162,14 @@ class Template(Login):
             json_version_list = f'$.data.list[?(@.name=="{version_data["name"]}")].id'
             version_res_id = jsonpath.jsonpath(get_version_list_res, json_version_list)[0]
         else:
-            logging.info(f"新建{version_data['name']}失败，并且在dst环境中也无法找到此版本，请检查！！")
-        logging.info(f"版本id：{version_res_id}")
+            logger.info(f"新建{version_data['name']}失败，并且在dst环境中也无法找到此版本，请检查！！")
+        logger.info(f"版本id：{version_res_id}")
 
         dst_version_info = self.get_version_api(self.dst_session, 'dst', version_res_id)
         # 获取dst的version解析、下发模版id
         dst_command_template_id = jsonpath.jsonpath(dst_version_info, "$.data.commandTemplate..id")[0]
         dst_parse_template_id = jsonpath.jsonpath(dst_version_info, "$.data.parseTemplate..id")[0]
-        logging.info("======新增完成======")
+        logger.info("======新增完成======")
 
         return dst_command_template_id, dst_parse_template_id, version_res_id
 
@@ -180,7 +179,7 @@ class Template(Login):
         :return:
         """
         str_output = self.src_template_exist_or_not()
-        logging.info("start：检查模版是否存在dst环境，如果存在就进行覆盖，不存在就进行新增模版同步数据")
+        logger.info("start：检查模版是否存在dst环境，如果存在就进行覆盖，不存在就进行新增模版同步数据")
         for k, v in str_output.items():
             src_version_data = self.get_version_api(self.src_session, 'src', k)
 
@@ -201,7 +200,7 @@ class Template(Login):
                 src_parse_template_data[0]["id"] = dst_parse_template_id
                 res_write = self.write_template_api([src_command_template_data[0], src_parse_template_data[0]])
                 assert res_write["code"] == 200, "上传接口失败,查看日志检查两个环境模版情况！"
-                logging.info(f"覆盖成功！{log_data}")
+                logger.info(f"覆盖成功！{log_data}")
             else:
                 dst_command_template_id, dst_parse_template_id, version_res_id = self.add_version_template(v)
                 v['dst_id'] = version_res_id
@@ -209,10 +208,10 @@ class Template(Login):
                 src_parse_template_data[0]["id"] = dst_parse_template_id
                 res_write = self.write_template_api([src_command_template_data[0], src_parse_template_data[0]])
                 assert res_write["code"] == 200, "上传接口失败,查看日志检查两个环境模版情况！"
-                logging.info(f"同步成功！{v} ")
-        logging.info("end：模版同步全部完成！！")
+                logger.info(f"同步成功！{v} ")
+        logger.info("end：模版同步全部完成！！")
         return str_output
 
 
 if __name__ == '__main__':
-    logging.info(Template().read_write_template())
+    logger.info(Template().read_write_template())

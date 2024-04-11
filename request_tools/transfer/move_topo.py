@@ -3,11 +3,10 @@
 # Author: Bobby Sheng <Bobby@sky-cloud.net>
 import jsonpath
 import json
-import logging
+from .filelog import logger
 from .move_device import Device
 from .common import ensure_path_sep, get_yaml_data
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 Config = get_yaml_data(ensure_path_sep("\\transfer\\config.yaml"))
 
 
@@ -110,14 +109,14 @@ class MoveTopo(Device):
                     if (src_topo['name'] == compare_element['name']) and (
                             src_topo['type'] == compare_element['type']) and (
                             src_topo['description'] == compare_element['description']):
-                        logging.info(f"[{src_topo['name']}] 在dst环境存在，不新增，获取id {compare_element['id']}")
+                        logger.info(f"[{src_topo['name']}] 在dst环境存在，不新增，获取id {compare_element['id']}")
                         src_topo["dst_topo_id"] = compare_element['id']
                         src_dst_topo_relation.append(src_topo)
             else:
                 dst_topo_id = self.add_topo(src_topo)
                 src_topo["dst_topo_id"] = dst_topo_id
                 src_dst_topo_relation.append(src_topo)
-                logging.info(f"[{src_topo['name']}] ,新增，获取id")
+                logger.info(f"[{src_topo['name']}] ,新增，获取id")
 
         return src_dst_topo_relation
 
@@ -148,7 +147,7 @@ class MoveTopo(Device):
             res_data = res.get("data")
             assert res['code'] == 200, f"dst环境拓扑报错失败{res}"
             if res_data.get("nodes") == []:
-                logging.info(f"{src_topo_info['name']}  拓扑无内容node，不做处理")
+                logger.info(f"{src_topo_info['name']}  拓扑无内容node，不做处理")
                 continue
             else:
                 nodes_list = jsonpath.jsonpath(res_data, "$.nodes..id")
@@ -162,7 +161,7 @@ class MoveTopo(Device):
                 if dst_add_topo_data:
                     updated_data = json.loads(dst_add_topo_data)
                     self.dst_save_topo(updated_data)
-                    logging.info(f"{src_topo_info['name']}  dst TOPO保存成功!")
+                    logger.info(f"{src_topo_info['name']}  dst TOPO保存成功!")
                 else:
-                    logging.info(f"{src_topo_info['name']}  srcTOPO中存在已被删除设备节点，跳过不新增！")
+                    logger.info(f"{src_topo_info['name']}  srcTOPO中存在已被删除设备节点，跳过不新增！")
 

@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 # Author: Bobby Sheng <Bobby@sky-cloud.net>
 import requests
-import logging
+from .filelog import logger
 from .common import ensure_path_sep, get_yaml_data, encrypt_password
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 Config = get_yaml_data(ensure_path_sep("\\transfer\\config.yaml"))
 
 
@@ -31,10 +30,10 @@ class Login:
             if i == "src":
                 src_json = src_session.post(url=src_url, json=data, headers=headers, verify=True).json()
                 assert src_json["code"] == 200, "src登录失败"
-                logging.info("=====src环境登录成功！=====")
+                logger.info("=====src环境登录成功！=====")
             else:
                 dsr_json = dst_session.post(url=src_url, json=data, headers=headers, verify=True).json()
                 assert dsr_json["code"] == 200, "dst登录失败"
-                logging.info("=====dst环境登录成功！=====")
+                logger.info("=====dst环境登录成功！=====")
 
         return src_session, dst_session
